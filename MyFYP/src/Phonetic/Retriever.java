@@ -78,7 +78,8 @@ public class Retriever {
 		// System.out.println((int)(a.charAt(1)));
 		// System.out.println("\u7686");
 		// System.out.println(node.toPlainTextString());
-		String url = "http://www.learnersdictionary.com/definition/" + m_word;
+		//String url = "http://www.learnersdictionary.com/definition/" + m_word;
+		String url = "http://www.merriam-webster.com/dictionary/" + m_word;
 		if(i > 1)
 			url += "["+i+"]";
 		Parser parser = new Parser();
@@ -113,13 +114,13 @@ public class Retriever {
 	 */
 	public static void main(String[] args) throws ParserException, FileNotFoundException {
 		// TODO Auto-generated method stub
-		File file = new File("dictionary.txt");
-		Scanner sc = new Scanner(file);
-		while(sc.hasNext())
-		{
-			String word = sc.next();
-			Retriever retriever = new Retriever(word,null);
-		}
+		//File file = new File("dictionary.txt");
+//		Scanner sc = new Scanner(file);
+//		while(sc.hasNext())
+//		{
+//			String word = sc.next();
+			Retriever retriever = new Retriever("present",null);
+//		}
 		//retriever.extractWords("http://www.learnersdictionary.com/definition/hello");
 	}
 
