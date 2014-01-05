@@ -35,7 +35,7 @@ public class ManualDatabase {
 		hashtable.put("FAM", new WordStruct("FAM","1","cv*c"));
 		hashtable.put("ONE-EYED", new WordStruct("ONE-EYED","01","cv*cvvv*c"));
 		hashtable.put("KISSIN'", new WordStruct("KISSIN'","10","cv*ccv*c"));
-		hashtable.put("'BOUT", new WordStruct("'BOUT","1","cvv*c"));
+		hashtable.put("'BOUT", new WordStruct("'BOUT","1","cvv*c")); 
 		
 		
 		
