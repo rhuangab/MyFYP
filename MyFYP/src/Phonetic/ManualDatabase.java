@@ -27,6 +27,7 @@ public class ManualDatabase {
 			addAWordToDatabase(getNextWordStruct());
 		}
 		DatabaseManager.commitAndClose();
+		System.out.println("finished");
 	}
 	
 	public WordStruct getNextWordStruct()
@@ -81,9 +82,6 @@ public class ManualDatabase {
 	
 	public static void main(String[] args) throws IOException {
 		ManualDatabase md = new ManualDatabase();
-		while(md.scanner.hasNext())
-		{
-			System.out.println(md.scanner.next());
-		}
+		md.addAllWord();
 	}
 }
