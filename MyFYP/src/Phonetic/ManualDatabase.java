@@ -1,6 +1,8 @@
 package Phonetic;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
 
 import DatabaseManager.DatabaseManager;
 
@@ -10,10 +12,41 @@ import jdbm.htree.HTree;
 
 public class ManualDatabase {
 	private HTree hashtable;
+	public Scanner scanner;
 	public ManualDatabase() throws IOException
 	{
-		hashtable = DatabaseManager.getHashtableSingleton();
+		hashtable = null;
+		scanner = new Scanner(new File("log_toUpdate.txt"));
 	}
+	
+	public void addAllWord() throws IOException
+	{
+		hashtable = DatabaseManager.getHashtableSingleton();
+		while(scanner.hasNext())
+		{
+			addAWordToDatabase(getNextWordStruct());
+		}
+		DatabaseManager.commitAndClose();
+	}
+	
+	public WordStruct getNextWordStruct()
+	{
+		if(scanner.hasNext())
+		{
+			String word = scanner.next().toUpperCase();
+			String stress = scanner.next();
+			String cv = scanner.next();
+			return new WordStruct(word, stress, cv);
+		}
+		return null;
+	}
+	
+	public void addAWordToDatabase(WordStruct wd) throws IOException
+	{
+		hashtable.put(wd.word, wd);
+	}
+	
+	
 	
 	/*public static String getCV(String s) {
 		String cv = "";
@@ -47,6 +80,10 @@ public class ManualDatabase {
 	
 	
 	public static void main(String[] args) throws IOException {
-
+		ManualDatabase md = new ManualDatabase();
+		while(md.scanner.hasNext())
+		{
+			System.out.println(md.scanner.next());
+		}
 	}
 }
