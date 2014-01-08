@@ -24,19 +24,19 @@ public class MelodyParser {
     	sequencer = MidiSystem.getSequencer();
         sequencer.open();
         
-        sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/Without You.mid"));
+        sequence = MidiSystem.getSequence(new File("/Users/jenny/Desktop/Turkey.mid"));
         sequencer.setSequence(sequence);
         
         //Synthesizer synthesizer = MidiSystem.getSynthesizer();
     	//synthesizer.open();//
         
-        sequencer.stop(); 
+        
         Midi myMidi = new Midi(sequencer, sequence);
-        //myMidi.SeperateChannel();
-        Sequence newSequence = myMidi.newSequence;
+        // myMidi.SeperateChannel();
+        //Sequence newSequence = myMidi.newSequence;
         myMidi.printTrackInformation(sequence);
         //myMidi.printTrackInformation(myMidi.newSequence);
-                
+        sequencer.stop();     
 
         //synthesizer.close();
 
