@@ -50,7 +50,7 @@ public class Midi {
     	FileWriter output = null;
     	double tickSize;
     	if(sequence == sequence){
-    		output = new FileWriter("old sequence.txt");
+    		output = new FileWriter("sequence.txt");
     		System.out.println("writing old sequence information");
     	}
     		
@@ -94,7 +94,9 @@ public class Midi {
                  output.write("@" + event.getTick() + " $" + event.getTick()*tickSize +" ");
                  MidiMessage message = event.getMessage();
                  if (message instanceof ShortMessage) {
+                	 
                      ShortMessage sm = (ShortMessage) message;
+                     output.write("Channel: " + sm.getChannel() + " ");
                      if (sm.getCommand() == NOTE_ON) {
                          int key = sm.getData1();
                          int octave = (key / 12)-1;
@@ -127,6 +129,7 @@ public class Midi {
                      output.write("Other meta message: " + message.getClass()+"\n");
                  }
     		}
+    		output.write("\n");
     	}
     	output.write("The total size of the sequence is " + numOfBytes);
     }
@@ -136,7 +139,7 @@ public class Midi {
     //convert old sequence to new sequence where each track has one channel for human test
     public void SeperateChannel() throws InvalidMidiDataException {
     	newSequence = new Sequence(divisionType,sequence.getResolution());
-    	for(int i = 0; i < 16;++i) {
+    	for(int i = 0; i < 17;++i) {
     		newSequence.createTrack();
     	}
     	Track[] newTrack = newSequence.getTracks();
@@ -174,7 +177,7 @@ public class Midi {
                     ShortMessage sm = (ShortMessage) message;
                     
                     int numChannel = sm.getChannel();
-                    newTrack[numChannel].add(new MidiEvent(message,event.getTick()));
+                    newTrack[numChannel].add(event);
                     //System.out.println(" new tick size is " + )
                     //System.out.print("Channel: " + sm.getChannel() + " ");
                     if (sm.getCommand() == NOTE_ON) {
@@ -205,6 +208,7 @@ public class Midi {
                     }
                     
                 } else {
+                	newTrack[16].add(event);
                     //System.out.println("Other message: " + message.getClass());
                 }
             }

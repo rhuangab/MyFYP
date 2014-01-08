@@ -32,10 +32,10 @@ public class MelodyParser {
         
         sequencer.stop(); 
         Midi myMidi = new Midi(sequencer, sequence);
-        myMidi.SeperateChannel();
-        //Sequence newSequence = myMidi.newSequence;
+        //myMidi.SeperateChannel();
+        Sequence newSequence = myMidi.newSequence;
         myMidi.printTrackInformation(sequence);
-        myMidi.printTrackInformation(myMidi.newSequence);
+        //myMidi.printTrackInformation(myMidi.newSequence);
                 
 
         //synthesizer.close();
