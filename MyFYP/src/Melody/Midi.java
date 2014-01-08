@@ -1,5 +1,8 @@
 package Melody;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
@@ -43,16 +46,89 @@ public class Midi {
     }*/
     
     //collect track information
-    public void printTrackInformation(Sequence sequence) {
+    public void printTrackInformation(Sequence sequence) throws IOException {
+    	FileWriter output = null;
+    	double tickSize;
+    	if(sequence == sequence){
+    		output = new FileWriter("old sequence.txt");
+    		System.out.println("writing old sequence information");
+    	}
+    		
+    	else if(sequence == newSequence) 
+    		output = new FileWriter("new sequence.txt");
+    	else {
+    		System.out.println("writing new sequence information");
+    	}
     	int trackNumber = 0;
-    	System.out.println("There are total " + sequence.getTracks().length + " track in this midi file");
+    	output.write("There are total " + sequence.getTracks().length + " track in this midi file"+"\n");
+    	output.write("The division type for this sequence is equal to the old one " + (sequence.getDivisionType() == Sequence.PPQ) + " resolution is " + sequence.getResolution() +"\n");
+    	
+    	double ticksPerSecond;
+        if(divisionType == Sequence.PPQ) {
+        	System.out.println("PPQ type" + sequencer.getTempoInBPM());
+        	ticksPerSecond =  sequence.getResolution() * (sequencer.getTempoInBPM()/ 60.0);
+        	tickSize = 1.0 / ticksPerSecond;
+
+        }
+        else {
+        	System.out.println("SMPTE type");
+        	 double framesPerSecond = 
+        		  (divisionType == Sequence.SMPTE_24 ? 24
+        		    : (divisionType == Sequence.SMPTE_25 ? 25
+        		      : (divisionType == Sequence.SMPTE_30 ? 30
+        		        : (divisionType == Sequence.SMPTE_30DROP ? 29.97:29.97))));
+        		 ticksPerSecond = sequence.getResolution() * framesPerSecond;
+        		 tickSize = 1.0 / ticksPerSecond;
+        }
+        output.write("tick size is " + tickSize + " it is equal to the old one: " + (tickSize == this.tickSize)+"\n");
+        
     	int numOfBytes = 0;
     	for(Track track : sequence.getTracks()) {
     		trackNumber++;
     		numOfBytes += track.size();
-    		System.out.println("Track " + trackNumber + ": size = " + track.size() );
+    		output.write("Track " + trackNumber + ": size = " + track.size()+"\n" );
+    		
+    		for(int i = 0; i < track.size();++i) {
+    			 MidiEvent event = track.get(i);
+                 //tickSize = calTickSize();
+                 output.write("@" + event.getTick() + " $" + event.getTick()*tickSize +" ");
+                 MidiMessage message = event.getMessage();
+                 if (message instanceof ShortMessage) {
+                     ShortMessage sm = (ShortMessage) message;
+                     if (sm.getCommand() == NOTE_ON) {
+                         int key = sm.getData1();
+                         int octave = (key / 12)-1;
+                         int note = key % 12;
+                         String noteName = NOTE_NAMES[note];
+                         int velocity = sm.getData2();
+                         if(velocity == 0) {
+                         	output.write("Note off, " + noteName + octave + " key=" + key + " velocity: " + velocity+"\n");
+                         }else {
+                         	output.write("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity+"\n");
+                         }
+              
+                     } else if (sm.getCommand() == NOTE_OFF) {
+                         int key = sm.getData1();
+                         int octave = (key / 12)-1;
+                         int note = key % 12;
+                         String noteName = NOTE_NAMES[note];
+                         int velocity = sm.getData2();
+                         output.write("Note off, " + noteName + octave + " key=" + key + " velocity: " + velocity+"\n");
+                         
+                     } else if(sm.getCommand() == CONTROL_CHANGE) {
+                     	output.write("Control Change message"+"\n");
+                     	
+                     } else {
+                        output.write("Other short message:" + sm.getCommand()+"\n");
+                     }
+                 
+                     
+                 } else {
+                     output.write("Other meta message: " + message.getClass()+"\n");
+                 }
+    		}
     	}
-    	System.out.println("The total size of the sequence is " + numOfBytes);
+    	output.write("The total size of the sequence is " + numOfBytes);
     }
     
    
@@ -68,13 +144,13 @@ public class Midi {
     	//calculate tickSize;
     	double ticksPerSecond;
         if(divisionType == Sequence.PPQ) {
-        	//System.out.println("PPQ type" + sequencer.getTempoInBPM());
+        	System.out.println("PPQ type" + sequencer.getTempoInBPM());
         	ticksPerSecond =  sequence.getResolution() * (sequencer.getTempoInBPM()/ 60.0);
         	tickSize = 1.0 / ticksPerSecond;
 
         }
         else {
-        	//System.out.println("SMPTE type");
+        	System.out.println("SMPTE type");
         	 double framesPerSecond = 
         		  (divisionType == Sequence.SMPTE_24 ? 24
         		    : (divisionType == Sequence.SMPTE_25 ? 25
@@ -83,7 +159,7 @@ public class Midi {
         		 ticksPerSecond = sequence.getResolution() * framesPerSecond;
         		 tickSize = 1.0 / ticksPerSecond;
         }
-        
+        //System.out.println("thick size is " + tickSize);
     	int trackNumber = 0;
     	for (Track track :  sequence.getTracks()) {
             trackNumber++;
@@ -92,13 +168,14 @@ public class Midi {
             for (int i=0; i < track.size(); i++) { 
                 MidiEvent event = track.get(i);
                 //tickSize = calTickSize();
-                //System.out.print("@" + event.getTick() * tickSize + " ");
+                System.out.println("@" + event.getTick() * tickSize + " ");
                 MidiMessage message = event.getMessage();
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
                     
                     int numChannel = sm.getChannel();
-                    newTrack[numChannel].add(event);
+                    newTrack[numChannel].add(new MidiEvent(message,event.getTick()));
+                    //System.out.println(" new tick size is " + )
                     //System.out.print("Channel: " + sm.getChannel() + " ");
                     if (sm.getCommand() == NOTE_ON) {
                         int key = sm.getData1();
