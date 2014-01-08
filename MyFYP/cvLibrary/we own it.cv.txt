@@ -1,0 +1,106 @@
+[00:01.00]cv*c cv*cv*cv* cc* ccvv*cv 
+[00:04.00]v*c cv*c cv*cv*cv* cv*c 
+[00:09.11]cc* ccvv*cv 
+[00:11.94]cv*cv* cv* cv*cv*cv*cv*c 
+[00:13.39]cv*cv* cv* cv*ccv*cv*cv*c 
+[00:14.84]cc* v*c cv*cv*cv*c 
+[00:16.17]cv* cv*cv*c cv*c cv* 
+[00:17.74]cv* v*c cvv*cv*cvvc 
+[00:18.80]v* cv*c v*c cv*c cv* cv*c 
+[00:20.13]v*c cv*cv*cv* cv* cv*c cc* cc* 
+[00:21.35]v*c cv*cc cc* v* v*c 
+[00:22.96]cv* v*c cv* cv*c v* cv*c 
+[00:25.61]cv*ccv*cc v*c cv* cv*cc 
+[00:27.20]cv*c v* ccv*cc 
+[00:28.19]v*cc cv* cv*c v*c cc*cv*c 
+[00:29.62]cv*c v* cv*cvvv*c ccv*c 
+[00:31.15]cc* cv*c cv*c cv* cv*ccv*c cv* cv*c 
+[00:32.33]cv*c cv*c v* ccv*cc 
+[00:33.86]cv*cv*ccv*c cv* cv*cv*c 
+[00:35.23]cv*ccc cv*c v*ccv*c 
+[00:36.77]cc*cv*cc ccv* cv*c 
+[00:38.06]cv* cv* cv*c cc* ccv*c v*c 
+[00:39.82]cc* cc*cc ccv*ccv*c cv* cvv*c cv*c 
+[00:41.65]v* cv* cv*c cv*cv*c v*cv*c 
+[00:43.59]cv*c cv* cv*cv* cv*c 
+[00:45.22]v* cv*cv* cv*cc cv*c v*c cv*v*c 
+[00:48.47]v* v*ccv* cv*c cv*cv* ccv*v*c 
+[00:51.16]v* v*c cv*cv*cv* v* v*c 
+[00:53.41]v*ccv* cv*c cv*c cv*c cv* cv* 
+[00:56.61]cv*c cv*c v*ccv*cv*c cv*cc v*c cv*cv*c 
+[00:59.16]v*cv*c v*c v* cv*c ccv* cccv*cc 
+[01:02.87]UNDEF  cv* cv*c v*c 
+[01:04.31]cv*c cv*cv*cc cv* v*c v*c 
+[01:07.68]v*cc v* cv*c cc* cv* ccv*c cv*c 
+[01:10.33]cv*cv*c v*c cv*c cv*c cv*ccv*v*c 
+[01:12.99]cv* cv*c cv*cv*c v* cv*c cv*c 
+[01:15.90]cv*c cv*cv*cc cv* v*c v*c 
+[01:19.48]v*cc cv* cv*c cv*cc cv*c v* cv*c cv*c 
+[01:20.41]cv* cv* cv*c cv*cc cv*c v* cv* cv*c 
+[01:21.89]cc*c v*c v*c v*c v*c cv* cv*c cv*c 
+[01:23.46]v*c cc* cc*cv*c cv*c cv* 
+[01:24.73]cc* cv*c cv*cc cv*c 
+[01:26.19]v*c cv* cc* cv*c v*c v*c cv* ccv*c cv*c 
+[01:26.96]cv* cc* ccv*c 
+[01:27.54]cv*c v* cv*c cv*c 
+[01:28.56]v*cc cv* cv*ccv* cccv*c 
+[01:29.03]v* cv*c cv*c 
+[01:29.91]v*cc cv* cv* v*v*cc v*c 
+[01:30.70]cv*c cc* cv* 
+[01:31.38]cv*c cv* cv*c cc* cv* 
+[01:32.22]cv*cv*c cv*cc 
+[01:33.00]cv*ccv*c cv*c cv* cv*cc 
+[01:34.29]cc* cv*c v*ccv*cv* 
+[01:35.06]cv*cv*c v*c cc*cv*c v*c cv*c v*c 
+[01:36.72]cv*cv*c cc*c cv* cv*c 
+[01:37.93]cv*c cv* cv*c v*c cc* cc* v*c cv*c 
+[01:39.51]cv*c cc* v*c cc* cv*c cv*c cv*cv*cv* 
+[01:41.70]v* cv*cv* cv*cc cv*c v*c cv*v*c 
+[01:44.43]v* v*ccv* cv*c cv*cv* ccv*v*c 
+[01:46.93]v* v*c cv*cv*cv* v* v*c 
+[01:49.29]v*ccv* cv*c cv*c cv*c cv* cv* 
+[01:52.06]cv*c cv*c v*ccv*cv*c cv*cc v*c cv*cv*c 
+[01:56.11]v*cv*c v*c v* cv*c ccv* cccv*cc 
+[01:58.81]UNDEF  cv* cv*c v*c 
+[02:00.89]cv*c cv*cv*cc cv* v*c v*c 
+[02:03.62]v*cc v* cv*c cc* cv* ccv*c cv*c 
+[02:06.17]cv*cv*c v*c cv*c cv*c cv*ccv*v*c 
+[02:08.97]cv* cv*c cv*cv*c v* cv*c cv*c 
+[02:11.58]cv*c cv*cv*cc cv* v*c v*c 
+[02:14.96]cv*c cv* cv*cv*cc cv* v*c cv* cv*c 
+[02:16.83]cv* cv*c cv*c cv*cc 
+[02:18.21]cv*c ccv*cc*v*cv*c ccv*c cv*cc 
+[02:19.84]v*c cv* cv* v*c cv* cv*c 
+[02:21.58]v*cc v* cv*cv* cc* cv*c 
+[02:22.58]cv*c cv* ccv*cv*c 
+[02:24.01]v* cv*cv*c cv*c v* cv*cv* v*ccv*c 
+[02:25.47]cv*cv*ccv*c v*cccv*c 
+[02:27.07]v* ccv* cv*c v* v*cc v*c cv*c 
+[02:28.55]cv*c cv*c cv* ccv*c 
+[02:29.98]cv* v* ccv*c cc* cv* v*ccv*c 
+[02:31.26]v*c cv* cv*c cv*c cv*cc cv*cv*c v*c cv*c 
+[02:33.90]v* cc*c cv*cv* v*c cv*c cv*c 
+[02:35.45]v* v*c cv*c 
+[02:36.97]ccv*c cc* cv* ccv*c v*ccv*c cv*cc cv*c 
+[02:39.72]cv* cc*c ccv*cc v*c cv*cv* cv*c 
+[02:41.04]cv* cv* cv*c v*cc cv*v*ccv* cv*cv* cv*cc v*c 
+[02:43.88]cv*c cv*c cv*cc cv* cv*c 
+[02:45.26]cc*c v*c cv*c cv* cv*c ccv*c 
+[02:46.66]cv*ccv*c v*c v*c v*cv*cv*cv* 
+[02:48.21]cc* ccv* cc* cv* cv*c cv*c cv*c v*cv*c v*c 
+[02:50.61]cv*c v* ccv*ccv*c 
+[02:51.45]v* cv*c cv* cv*c cv*c 
+[02:52.25]cv*cv* cv*cc cv* cv*cc 
+[02:53.63]ccv*ccv* ccv*cc cv* ccv*cc 
+[02:54.74]cv*cv* cv* cv*c cv*c 
+[02:56.40]cv*cv* cv*c v*v* cv*cc 
+[02:57.76]v*v* cv*cc cv*cc v*cv*c cc*c cv*cccv*c 
+[02:59.20]cv*c cv*c v*ccv*cv*c cv*cc v*c cv*cv*c 
+[03:03.16]v*cv*c v*c v* cv*c ccv* cccv*cc 
+[03:05.89]UNDEF  cv* cv*c v*c 
+[03:07.77]cv*c cv*cv*cc cv* v*c v*c 
+[03:10.27]v*cc v* cv*c cc* cv* ccv*c cv*c 
+[03:13.07]cv*cv*c v*c cv*c cv*c cv*ccv*v*c 
+[03:15.84]cv* cv*c cv*cv*c v* cv*c cv*c 
+[03:18.61]cv*c cv*cv*cc cv* v*c v*c 
+[03:30.10]cv*c cv*cv*cc cv* v*c v*c 

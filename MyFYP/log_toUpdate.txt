@@ -1,8 +1,4 @@
-IMA    
-REPPIN    
-TAKIN    
-IMA    
-SITTIN    
-JUMPIN    
-PLENTLY    
-IMA    
+REPPIN    10 cv*ccv*c
+TAKIN     10 cv*cv*c
+SITTIN    10 cv*cv*c
+JUMPIN    10 cv*ccv*c

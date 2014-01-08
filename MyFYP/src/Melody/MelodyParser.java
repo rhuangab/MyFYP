@@ -28,7 +28,7 @@ public class MelodyParser {
         sequencer.setSequence(sequence);
         
         //Synthesizer synthesizer = MidiSystem.getSynthesizer();
-    	//synthesizer.open();
+    	//synthesizer.open();//
         
         sequencer.stop(); 
         Midi myMidi = new Midi(sequencer, sequence);
