@@ -1,7 +1,6 @@
 package Melody;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,84 +12,6 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
-
-/**
- * An example that plays a Midi sequence. First, the sequence is played once
- * with track 1 turned off. Then the sequence is played once with track 1 turned
- * on. Track 1 is the drum track in the example midi file.
- */
-public class MidiTest implements MetaEventListener {
-
-	// The drum track in the example Midi file
-	private static final int MUTE_TRACK = 0;
-
-	public static void main(String[] args) throws MidiUnavailableException, InvalidMidiDataException, IOException {
-		new MidiTest().run();
-	}
-
-	private MidiPlayer player;
-
-	public void run() throws MidiUnavailableException, InvalidMidiDataException, IOException {
-
-		player = new MidiPlayer();
-
-		Sequencer sequencer = MidiSystem.getSequencer();
-        sequencer.open();
-        
-        Sequence sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/Without You.mid"));
-        sequencer.setSequence(sequence);
-        
-        sequencer.stop(); 
-        Midi myMidi = new Midi(sequencer, sequence);
-        //myMidi.infoSequence(true);
-        myMidi.SeperateChannel();
-        Sequence newSequence = myMidi.newSequence;
-       
-
-		// play the sequence
-        
-        System.out.println("old sequence information: ");
-        myMidi.printTrackInformation(sequence);
-        System.out.println("new sequence information: ");
-        //myMidi.printTrackInformation(newSequence);
-        
-        //player.play(sequence, true);
-        
-        //System.out.println("new seperate files");
-		player.play(newSequence, true);
-
-		// turn off the drums
-		System.out.println("Playing without track " + MUTE_TRACK);
-		sequencer = player.getSequencer();
-		sequencer.setTrackMute(MUTE_TRACK, true);
-		//player.play(newSequence,true);
-		
-		sequencer.addMetaEventListener(this);
-
-	}
-
-	/**
-	 * This method is called by the sound system when a meta event occurs. In
-	 * this case, when the end-of-track meta event is received, the mute track
-	 * is turned on.
-	 */
-	public void meta(MetaMessage event) {
-		if (event.getType() == MidiPlayer.END_OF_TRACK_MESSAGE) {
-			Sequencer sequencer = player.getSequencer();
-			if (sequencer.getTrackMute(MUTE_TRACK)) {
-				// turn on the drum track
-				System.out.println("Turning on drums...");
-				sequencer.setTrackMute(MUTE_TRACK, false);
-			} else {
-				// close the sequencer and exit
-				System.out.println("Exiting...");
-				player.close();
-				System.exit(0);
-			}
-		}
-	}
-
-}
 
 class MidiPlayer implements MetaEventListener {
 
@@ -223,5 +144,4 @@ class MidiPlayer implements MetaEventListener {
 	public boolean isPaused() {
 		return paused;
 	}
-
 }

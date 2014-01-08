@@ -17,6 +17,7 @@ public class MelodyParser {
 	
     public static Sequencer sequencer;
     public static Sequence sequence;
+    public static String filename;
     
     
     public static void main(String[] args) throws Exception {
@@ -24,21 +25,16 @@ public class MelodyParser {
     	sequencer = MidiSystem.getSequencer();
         sequencer.open();
         
-        sequence = MidiSystem.getSequence(new File("/Users/jenny/Desktop/Turkey.mid"));
+        filename = "Turkey";
+        sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/"+filename+".mid"));
         sequencer.setSequence(sequence);
+       
         
-        //Synthesizer synthesizer = MidiSystem.getSynthesizer();
-    	//synthesizer.open();//
-        
-        
-        Midi myMidi = new Midi(sequencer, sequence);
-        // myMidi.SeperateChannel();
-        //Sequence newSequence = myMidi.newSequence;
-        myMidi.printTrackInformation(sequence);
-        //myMidi.printTrackInformation(myMidi.newSequence);
+        Midi myMidi = new Midi(sequence,sequencer.getTempoInBPM());
+        myMidi.printTrackInformation(filename,true);
+        myMidi.printTrackInformation(filename,false);
         sequencer.stop();     
 
-        //synthesizer.close();
 
     }
 	

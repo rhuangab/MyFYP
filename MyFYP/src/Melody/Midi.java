@@ -18,7 +18,8 @@ public class Midi {
     public static final int NUM_OF_TRACK = 30;
     public static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
     public double tickSize;
-    public Sequencer sequencer;
+    public double tempoInBPM;
+    //public Sequencer sequencer;
     public Sequence sequence;
     public Sequence newSequence;
     private float divisionType;
@@ -28,7 +29,7 @@ public class Midi {
     	double tickSize;
     	double ticksPerSecond;
         if(divisionType == Sequence.PPQ) {
-        	ticksPerSecond =  sequence.getResolution() * (sequencer.getTempoInBPM()/ 60.0);
+        	ticksPerSecond =  sequence.getResolution() * (tempoInBPM / 60.0);
         	tickSize = 1.0 / ticksPerSecond;
         	//System.out.println("Outter PPQ type: sequencer tempoInBMP: " + sequencer.getTempoInBPM() + " resolution: " +sequence.getResolution() + "tickSize: " + tickSize );
 
@@ -48,23 +49,27 @@ public class Midi {
     }
     
     //collect track information
-    public void printTrackInformation(Sequence sequence) throws IOException {
+    public void printTrackInformation(String filename, boolean old) throws IOException {
+    	Sequence sequence;
     	FileWriter output = null;
-    	//double tickSize;
-    	if(sequence == sequence){
-    		output = new FileWriter("old sequence.txt");
-    		System.out.println("writing old sequence information");
-    	}
+    	if(old) {
+    		sequence = this.sequence;
+    		output = new FileWriter("/Users/jenny/git/MyFYP/MyFYP/MidiInfoPack/old"+filename+".txt");
     		
-    	else if(sequence == newSequence) 
-    		output = new FileWriter("new sequence.txt");
+    	}
     	else {
-    		System.out.println("writing new sequence information");
+    		sequence = this.newSequence;
+    		output = new FileWriter("/Users/jenny/git/MyFYP/MyFYP/MidiInfoPack/new"+filename+".txt");
     	}
     	
     	output.write("There are total " + sequence.getTracks().length + " track in this midi file"+"\n");
-    	output.write("The division type for this sequence is equal to the old one " + (sequence.getDivisionType() == Sequence.PPQ) + " resolution is " + sequence.getResolution() +"\n");
+    	//output.write("The division type for this sequence is equal to the old one " + (sequence.getDivisionType() == Sequence.PPQ) + " resolution is " + sequence.getResolution() +"\n");
  
+    	int num = 0;
+    	for(Track track : sequence.getTracks()) {
+    		num++;
+    		output.write("Track " + num + ":size = " + track.size() + "\n");
+    	}
     	int trackNumber = 0;
     	int numOfBytes = 0;
     	for(Track track : sequence.getTracks()) {
@@ -121,33 +126,15 @@ public class Midi {
    
     
     //convert old sequence to new sequence where each track has one channel for human test
-    public void SeperateChannel() throws InvalidMidiDataException {
+    public void seperateChannel() throws InvalidMidiDataException {
     	newSequence = new Sequence(divisionType,sequence.getResolution());
-    	for(int i = 0; i < NUM_OF_TRACK;++i) {
+    	for(int i = 0; i < 16 ;++i) {
     		newSequence.createTrack();
     	}
     	Track[] newTrack = newSequence.getTracks();
     	
-    	//calculate tickSize;
-    	/*double ticksPerSecond;
-        if(divisionType == Sequence.PPQ) {
-        	System.out.println("PPQ type" + sequencer.getTempoInBPM());
-        	ticksPerSecond =  sequence.getResolution() * (sequencer.getTempoInBPM()/ 60.0);
-        	tickSize = 1.0 / ticksPerSecond;
-
-        }
-        else {
-        	System.out.println("SMPTE type");
-        	 double framesPerSecond = 
-        		  (divisionType == Sequence.SMPTE_24 ? 24
-        		    : (divisionType == Sequence.SMPTE_25 ? 25
-        		      : (divisionType == Sequence.SMPTE_30 ? 30
-        		        : (divisionType == Sequence.SMPTE_30DROP ? 29.97:29.97))));
-        		 ticksPerSecond = sequence.getResolution() * framesPerSecond;
-        		 tickSize = 1.0 / ticksPerSecond;
-        }*/
-        //System.out.println("thick size is " + tickSize);
     	int trackNumber = 0;
+    	//System.out.println("orignal length is" + sequence.getTracks().length);
     	for (Track track :  sequence.getTracks()) {
             trackNumber++;
             //System.out.println("Track " + trackNumber + ": size = " + track.size());
@@ -155,7 +142,7 @@ public class Midi {
             for (int i=0; i < track.size(); i++) { 
                 MidiEvent event = track.get(i);
                 //tickSize = calTickSize();
-                System.out.println("@" + event.getTick() * tickSize + " ");
+                //System.out.println("@" + event.getTick() * tickSize + " ");
                 MidiMessage message = event.getMessage();
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
@@ -192,19 +179,40 @@ public class Midi {
                     }
                     
                 } else {
-                	newTrack[NUM_OF_TRACK-1].add(event);
+                	//newTrack[NUM_OF_TRACK-1].add(event);
                     //System.out.println("Other message: " + message.getClass());
                 }
             }
         }
+    	//System.out.println("original length is" + sequence.getTracks().length);
+    	//System.out.println("new  length is" + newSequence.getTracks().length);
+    	//System.out.println("judge: " + (newSequence == this.newSequence));
    }
   
+    //get information of a channel of the new Sequence 
+    public String getChannelInfo(int num) {
+    	String info = "NULL";
+    	String size;
+    	String startTime;
+    	String endTime;
+    	Track current = newSequence.getTracks()[num];
+    	size = Double.toString(current.size());
+    	if(current == null || current.size() == 0)
+    		return info;
+
+    	startTime = Double.toString(current.get(0).getTick() * tickSize);
+    	endTime = Double.toString(current.get(current.size()-1).getTick() * tickSize);
+    	info =size + "   " + startTime + "   " + endTime;
+    	return info;
+    }
     
-    Midi(Sequencer sequencer, Sequence sequence) {
+    Midi(Sequence sequence,double tempo) throws InvalidMidiDataException {
     	divisionType = sequence.getDivisionType();
     	this.sequence = sequence;
-    	this.sequencer = sequencer;
+    	//this.sequencer = sequencer;
     	tickSize = calTickSize();
+    	this.tempoInBPM = tempo;
+        seperateChannel();
     	}
 
 }
