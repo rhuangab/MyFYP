@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -44,6 +45,7 @@ public class TestGUI extends JFrame{
 	private boolean paused;
 	private int mainChannel;
 	private HashSet<Integer> onNote;
+	private HashMap<Integer,Integer> velocityMap;
 	
 	public static void main(String[] args) throws MidiUnavailableException, InvalidMidiDataException, IOException {
 		
@@ -55,7 +57,7 @@ public class TestGUI extends JFrame{
 	
 	TestGUI() throws MidiUnavailableException, InvalidMidiDataException, IOException {
 		
-		filename = "Turkey";
+		filename = "Without You";
 		
 		setUpPlayer();
 		
@@ -515,7 +517,9 @@ public class TestGUI extends JFrame{
 	//generate feature file of the midi file
 	public void  generateFeatureFile() throws IOException {
 		onNote = new HashSet<Integer>();
+		velocityMap = new HashMap<Integer,Integer>();
 		mainChannel = getSelectedButton();
+		
 		FileWriter output = new FileWriter("MidiFeature/"+filename +".txt");
 		FileWriter output2 = new FileWriter("MidiFeature2/"+filename +".txt");
 		Track mainTrack = newSequence.getTracks()[mainChannel];
@@ -530,17 +534,19 @@ public class TestGUI extends JFrame{
                 	if(sm.getData2() != 0) {
                     	output.write(sm.getData1() + "   "+ sm.getData2() +"   NOTE_ON" + "\n");
                     	onNote.add(new Integer(sm.getData1()));
+                    	velocityMap.put(sm.getData1(), sm.getData2());
+                    	
                 	}
                 	else {
                 		output.write(sm.getData1() + "   "+ sm.getData2() +"   NOTE_ON" + "\n");
                 		onNote.remove(new Integer(sm.getData1()));
+                		velocityMap.remove(sm.getData1());
                 	}
                 	Object[] onnote =  onNote.toArray(); 
                 	if(onnote.length > 0) {
                 		output2.write(Double.toString(event.getTick()* myMidi.tickSize) + "   ");
                 		for(int k = 0; k < onnote.length; ++k) {
-                			Integer temp = (Integer) onnote[k];
-                			output2.write(temp +"   ");
+                			output2.write(onnote[k] + ":" +  velocityMap.get(onnote[k]) + "   ");
                 			}
                 		output2.write("\n");  
                 	}

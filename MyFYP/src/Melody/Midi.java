@@ -164,15 +164,29 @@ public class Midi {
     public String getChannelInfo(int num) {
     	String info = "NULL";
     	String size;
-    	String startTime;
-    	String endTime;
+    	String startTime = "NULL";
+    	String endTime = "NULL";
     	Track current = newSequence.getTracks()[num];
     	size = Double.toString(current.size());
     	if(current == null || current.size() == 0)
     		return info;
 
-    	startTime = Double.toString(current.get(0).getTick() * tickSize);
-    	endTime = Double.toString(current.get(current.size()-1).getTick()* tickSize);
+    	boolean getFirst = true;
+    	for(int i = 0; i < current.size(); ++i) {
+    		MidiMessage curMessage = current.get(i).getMessage();
+    		if(curMessage instanceof ShortMessage) {
+    			if(((ShortMessage) curMessage).getCommand() == NOTE_ON){
+    				if(getFirst){
+    					startTime = Double.toString(current.get(i).getTick() * tickSize);
+        				getFirst = false;
+    				}
+    				endTime = Double.toString(current.get(i).getTick() * tickSize);
+    				
+    			}
+    		}
+    	}
+    	//startTime = Double.toString(current.get(0).getTick() * tickSize);
+    	//endTime = Double.toString(current.get(current.size()-1).getTick()* tickSize);
     	info =size + "   " + startTime + "   " + endTime;
     	return info;
     }
