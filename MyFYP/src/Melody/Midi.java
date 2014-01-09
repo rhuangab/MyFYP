@@ -31,7 +31,7 @@ public class Midi {
         if(divisionType == Sequence.PPQ) {
         	ticksPerSecond =  sequence.getResolution() * (tempoInBPM / 60.0);
         	tickSize = 1.0 / ticksPerSecond;
-        	//System.out.println("Outter PPQ type: sequencer tempoInBMP: " + sequencer.getTempoInBPM() + " resolution: " +sequence.getResolution() + "tickSize: " + tickSize );
+        	//System.out.println("Outter PPQ type: sequencer tempoInBMP: " + tempoInBPM + " resolution: " +sequence.getResolution() + "tickSize: " + tickSize );
 
         }
         else {
@@ -121,6 +121,8 @@ public class Midi {
     		output.write("\n");
     	}
     	output.write("The total size of the sequence is " + numOfBytes);
+    	if(output!=null)
+    		output.close();
     }
     
    
@@ -201,17 +203,35 @@ public class Midi {
     		return info;
 
     	startTime = Double.toString(current.get(0).getTick() * tickSize);
-    	endTime = Double.toString(current.get(current.size()-1).getTick() * tickSize);
+    	endTime = Double.toString(current.get(current.size()-1).getTick()* tickSize);
     	info =size + "   " + startTime + "   " + endTime;
     	return info;
+    }
+    
+    //find the duration of the a sequence
+    public String getFinishTime(boolean old) {
+    	Sequence curSequence;
+    	if(old)
+    		curSequence = sequence;
+    	else
+    		curSequence = newSequence;
+    	
+    	double time = -1 ;
+    	for(int i = 0; i < curSequence.getTracks().length; ++i) {
+    		Track cur = curSequence.getTracks()[i];
+    		if(time < cur.get(cur.size()-1).getTick() * tickSize) {
+    			time = cur.get(cur.size()-1).getTick() * tickSize;
+    		}
+    	}
+    	return Double.toString(time);
     }
     
     Midi(Sequence sequence,double tempo) throws InvalidMidiDataException {
     	divisionType = sequence.getDivisionType();
     	this.sequence = sequence;
-    	//this.sequencer = sequencer;
-    	tickSize = calTickSize();
+    	//this.sequencer = sequencer;  	
     	this.tempoInBPM = tempo;
+    	tickSize = calTickSize();
         seperateChannel();
     	}
 

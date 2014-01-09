@@ -13120,4 +13120,138 @@ Track 18: size = 602
 @40860 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
 @41040 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
 @41100 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
-@41160 $In
+@41160 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@41220 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@41280 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@41340 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@41520 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@41580 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@41640 $Infinity Channel: 7 Note on, D2 key=38 velocity: 100
+@41700 $Infinity Channel: 7 Note off, D2 key=38 velocity: 0
+@41760 $Infinity Channel: 7 Note on, C2 key=36 velocity: 100
+@41820 $Infinity Channel: 7 Note off, C2 key=36 velocity: 0
+@41880 $Infinity Channel: 7 Note on, D2 key=38 velocity: 100
+@41940 $Infinity Channel: 7 Note off, D2 key=38 velocity: 0
+@42000 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@42060 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@42060 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@42120 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@42120 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@42180 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@42180 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@42240 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@42240 $Infinity Channel: 7 Note on, A1 key=33 velocity: 100
+@42240 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@42300 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@42300 $Infinity Channel: 7 Note off, A1 key=33 velocity: 0
+@46320 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@46380 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@46560 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@46620 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@46800 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@46860 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@47040 $Infinity Channel: 7 Note on, D2 key=38 velocity: 100
+@47100 $Infinity Channel: 7 Note off, D2 key=38 velocity: 0
+@47280 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@47340 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@47520 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@47580 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@47760 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@47820 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@48000 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@48060 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@48240 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@48300 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@48480 $Infinity Channel: 7 Note on, D2 key=38 velocity: 100
+@48540 $Infinity Channel: 7 Note off, D2 key=38 velocity: 0
+@48720 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@48780 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@48960 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@49020 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@49200 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@49260 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@49320 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@49380 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@49440 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@49500 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@49560 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@49620 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@49680 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@49740 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@49800 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@49860 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@49920 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@49980 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@50040 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@50100 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@50160 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@50220 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@50280 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@50340 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@50400 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@50460 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@50520 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@50580 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@50640 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@50700 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@50760 $Infinity Channel: 7 Note on, B1 key=35 velocity: 100
+@50820 $Infinity Channel: 7 Note off, B1 key=35 velocity: 0
+@50880 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@50940 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@51120 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@51180 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@51360 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@51420 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@51600 $Infinity Channel: 7 Note on, D2 key=38 velocity: 100
+@51660 $Infinity Channel: 7 Note off, D2 key=38 velocity: 0
+@51840 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@51900 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@52080 $Infinity Channel: 7 Note on, E2 key=40 velocity: 100
+@52140 $Infinity Channel: 7 Note off, E2 key=40 velocity: 0
+@52320 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@52380 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@52560 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@52620 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@52800 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@52860 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@53040 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@53100 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@53160 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@53220 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@53280 $Infinity Channel: 7 Note on, A2 key=45 velocity: 100
+@53340 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@53400 $Infinity Channel: 7 Note on, A2 key=45 velocity: 127
+@53640 $Infinity Channel: 7 Note off, A2 key=45 velocity: 0
+@53640 $Infinity Other meta message: class javax.sound.midi.Track$ImmutableEndOfTrack
+
+Track 19: size = 3
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.Track$ImmutableEndOfTrack
+
+Track 20: size = 3
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.Track$ImmutableEndOfTrack
+
+Track 21: size = 3
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.Track$ImmutableEndOfTrack
+
+Track 22: size = 3
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.Track$ImmutableEndOfTrack
+
+Track 23: size = 3
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.Track$ImmutableEndOfTrack
+
+Track 24: size = 3
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.MetaMessage
+@0 $NaN Other meta message: class javax.sound.midi.Track$ImmutableEndOfTrack
+
+The total size of the sequence is 13183

@@ -23,6 +23,7 @@ public class MelodyParser {
     public static void main(String[] args) throws Exception {
     	
     	sequencer = MidiSystem.getSequencer();
+    	
         sequencer.open();
         
         filename = "Turkey";
@@ -33,7 +34,7 @@ public class MelodyParser {
         Midi myMidi = new Midi(sequence,sequencer.getTempoInBPM());
         myMidi.printTrackInformation(filename,true);
         myMidi.printTrackInformation(filename,false);
-        sequencer.stop();     
+        //sequencer.stop();     
 
 
     }
