@@ -1,6 +1,7 @@
 package Melody;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,18 +19,40 @@ class MidiPlayer implements MetaEventListener {
 	// Midi meta event
 	public static final int END_OF_TRACK_MESSAGE = 47;
 
-	private Sequencer sequencer;
+	public Sequencer sequencer;
 
-	private boolean loop;
+	public boolean loop;
 
-	private boolean paused;
+	public boolean paused;
+	
+	public MidiPlayer() {
+		try {
+			sequencer = MidiSystem.getSequencer();
+			sequencer.open();
+			sequencer.addMetaEventListener(this);
+		} catch (MidiUnavailableException ex) {
+			sequencer = null;
+		}
+	}
+	
+	public MidiPlayer(MidiPlayer player) {
+		try {
+			sequencer = player.sequencer;
+			if(sequencer.isOpen() == false)
+				sequencer.open();
+			sequencer.addMetaEventListener(this);
+		} catch (MidiUnavailableException ex) {
+			sequencer = null;
+		}
+	}
 
 	/**
 	 * Creates a new MidiPlayer object.
 	 */
-	public MidiPlayer() {
+	public MidiPlayer(Sequencer sequencer) {
 		try {
-			sequencer = MidiSystem.getSequencer();
+			this.sequencer = sequencer;
+			//sequencer = MidiSystem.getSequencer();
 			sequencer.open();
 			sequencer.addMetaEventListener(this);
 		} catch (MidiUnavailableException ex) {
@@ -143,5 +166,16 @@ class MidiPlayer implements MetaEventListener {
 	 */
 	public boolean isPaused() {
 		return paused;
+	}
+	
+	public static void main(String[] args) throws InvalidMidiDataException, IOException {
+		
+		MidiPlayer myPlayer = new MidiPlayer();
+		Sequence sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/Turkey.mid"));
+	
+	    Midi myMidi = new Midi(sequence,myPlayer.getSequencer().getTempoInBPM());
+		Sequence newSequence = myMidi.newSequence;
+		myPlayer.play(newSequence,false);
+		
 	}
 }

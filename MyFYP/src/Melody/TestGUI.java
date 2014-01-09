@@ -29,21 +29,24 @@ public class TestGUI extends JFrame{
 	private static ArrayList<JCheckBox> checkBox;
 	private static int numChannel=10;
 	private static ArrayList<Integer> isOn;
+	private boolean paused;
+	
+	public static void main(String[] args) throws MidiUnavailableException, InvalidMidiDataException, IOException {
+		
+		new TestGUI();
+		
+	}
+
+
 	
 	TestGUI() throws MidiUnavailableException, InvalidMidiDataException, IOException {
+		
 		filename = "Turkey";
-		//setUpPlayer();
 		
-		//player.close();
-		sequencer = MidiSystem.getSequencer();
-        //sequencer.open();
-	    sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/"+filename+".mid"));
-		sequencer.setSequence(sequence);
+		setUpPlayer();
 		
-		myMidi = new Midi(sequence,sequencer.getTempoInBPM());
-		newSequence = myMidi.newSequence;
-		numChannel = newSequence.getTracks().length;
 		makeGUI();
+		
 		
 		//initialize the isOn Array, 0 represents it is off
 		isOn = new ArrayList();
@@ -51,28 +54,30 @@ public class TestGUI extends JFrame{
 			isOn.add(new Integer(0));
 		}
 		
-		//sequencer.close();
-		//sequencer.start();
+		close();
+	
+		//player.close();
 		
 		
 	}
-	public static void main(String[] args) throws MidiUnavailableException, InvalidMidiDataException, IOException {
-		new TestGUI();
+	//set up player 
+	public void setUpPlayer() throws InvalidMidiDataException, IOException, MidiUnavailableException {
+       // MidiPlayer player = new MidiPlayer();
+        sequencer = MidiSystem.getSequencer();
+        sequencer.open();
+		//sequencer = player.getSequencer();
+	    sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/"+filename+".mid"));
+	    //myMidi = new Midi(sequence,player.getSequencer().getTempoInBPM());
+	    myMidi = new Midi(sequence,sequencer.getTempoInBPM());
+		newSequence = myMidi.newSequence; 
+		sequencer.setSequence(newSequence);
+		//sequencer.start();
+		//player.play(sequence, false);
+		
 	}
 	
-	/*public static void setUpPlayer() throws MidiUnavailableException, InvalidMidiDataException, IOException {
-
-		player = new MidiPlayer();
-		sequencer = MidiSystem.getSequencer();
-        sequencer.open();
-		sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/"+filename+".mid"));
-		Midi myMidi = new Midi(sequencer, sequence);
-		newSequence = myMidi.newSequence;
-		
-	    
-        sequencer.setSequence(sequence);
-        //sequencer.stop(); 
-	}*/
+	
+	
 	
 	//play only one specified channel
 	public void solo(int num) {
@@ -139,55 +144,205 @@ public class TestGUI extends JFrame{
         		
         	
         }
-        
-        
         for(int i = 0; i < 16; ++i) {
         	myPanel.add(tracks.get(i));
         	tracks.get(i).addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					try {
+						sequencer.open();
+						sequencer.setSequence(newSequence);
+						
+					} catch (MidiUnavailableException | InvalidMidiDataException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					reSet();
 					// TODO Auto-generated method stub
 					Object source = e.getSource();
 					if(source == tracks.get(0)) {
-						if(isOn.get(0).equals(0)) {
-							sequencer.close();
-							isOn.set(0, new Integer(1));
-						}
+						sequencer.setTrackSolo(0, true);
+						if(isPaused() || sequencer.isRunning() == false){
 							
-			
+							start();
+						}
 						else {
-							sequencer.setTrackSolo(0, true);
-							isOn.set(0, new Integer(0));
-							sequencer.start();
+							stop();
+							//setPaused(true);
 						}
 					}
 					else if(source == tracks.get(1)) {
-						if(isOn.get(1).equals(1)) {System.out.println("get into here1");
-						if(sequencer.isOpen())
-							sequencer.close();
-							isOn.set(0, new Integer(1));
-						}
+						sequencer.setTrackSolo(1, true);
+						if(isPaused() || sequencer.isRunning() == false){
 							
-			
-						else {System.out.println("get into here2");
-						    try {
-								sequencer.open();
-							} catch (MidiUnavailableException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							} 
-							//sequencer.setTrackSolo(1, true);
-							isOn.set(1, new Integer(0));
-							sequencer.start();
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
 						}
 					}
-					sequencer.close();
-					
-						
-					
+					else if(source == tracks.get(2)) {
+						sequencer.setTrackSolo(2, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(3)) {
+						sequencer.setTrackSolo(3, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(4)) {
+						sequencer.setTrackSolo(4, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(5)) {
+						sequencer.setTrackSolo(5, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(6)) {
+						sequencer.setTrackSolo(6, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(7)) {
+						sequencer.setTrackSolo(7, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(8)) {
+						sequencer.setTrackSolo(8, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(9)) {
+						sequencer.setTrackSolo(9, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(10)) {
+						sequencer.setTrackSolo(10, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(11)) {
+						sequencer.setTrackSolo(11, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(12)) {
+						sequencer.setTrackSolo(12, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(13)) {
+						sequencer.setTrackSolo(13, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(14)) {
+						sequencer.setTrackSolo(14, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else if(source == tracks.get(15)) {
+						sequencer.setTrackSolo(15, true);
+						if(isPaused() || sequencer.isRunning() == false){
+							
+							start();
+						}
+						else {
+							stop();
+							//setPaused(true);
+						}
+					}
+					else {
+						System.out.println("Error");
+					}
 				}
         		
         	});
+        	
         	myPanel.add(checkBox.get(i));
         	
         	
@@ -200,6 +355,53 @@ public class TestGUI extends JFrame{
         //myPanel.setVisible(true);
         setVisible(true);
         
+	}
+	
+	public void reSet() {
+		for(int i = 0; i < 16; ++i)
+			sequencer.setTrackSolo(i, false);
+	}
+
+	
+	 //Stops the sequencer and resets its position to 0.
+	public void stop() {
+		if (sequencer != null && sequencer.isOpen()) {
+			System.out.println("Stop playing");
+			sequencer.stop();
+			sequencer.setMicrosecondPosition(0);
+		}
+	}
+
+	 // start the sequencer.
+		public void start() {
+			if (sequencer != null && sequencer.isOpen()) {
+				System.out.println("start playing");
+				sequencer.start();
+			}
+		}
+
+	 // Closes the sequencer.
+	public void close() {
+		if (sequencer != null && sequencer.isOpen()) {
+			sequencer.close();
+		}
+	}
+	
+	 //Sets the paused state. Music may not immediately pause.
+	public void setPaused(boolean paused) {
+		if (this.paused != paused && sequencer != null && sequencer.isOpen()) {
+			this.paused = paused;
+			if (paused) {
+				sequencer.stop();
+			} else {
+				sequencer.start();
+			}
+		}
+	}
+
+	//Returns the paused state.
+	public boolean isPaused() {
+		return paused;
 	}
 	
 
