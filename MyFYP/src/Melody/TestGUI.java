@@ -94,7 +94,7 @@ public class TestGUI extends JFrame{
 	public void makeGUI() {
 	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle(filename);
+        setTitle(filename + "  suggested: " + myMidi.getSuggestMainChannel());
         setSize(400,400);
         setLocationRelativeTo(null);
         tracks = new ArrayList();
@@ -108,10 +108,63 @@ public class TestGUI extends JFrame{
 	
 		
         JButton original = new JButton("Original");
+        original.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					sequencer.open();
+					sequencer.setSequence(sequence);
+					
+				} catch (MidiUnavailableException | InvalidMidiDataException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				reSet();
+				if(isPaused() || sequencer.isRunning() == false){
+					
+					start();
+				}
+				else {
+					stop();
+					//setPaused(true);
+				}
+				
+			}
+        	
+        });
         myPanel.add(original);
         JCheckBox original1 = new JCheckBox("Duration:" + myMidi.getFinishTime(true));
         
         JButton separate = new JButton("New");
+        separate.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					sequencer.open();
+					sequencer.setSequence(newSequence);
+					
+				} catch (MidiUnavailableException | InvalidMidiDataException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				reSet();
+				if(isPaused() || sequencer.isRunning() == false){
+					
+					start();
+				}
+				else {
+					stop();
+					//setPaused(true);
+				}
+				
+			}
+        	
+        });
+        
         JCheckBox separate1 = new JCheckBox("Duration:" + myMidi.getFinishTime(false));
         
         myPanel.add(original);

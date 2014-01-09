@@ -225,6 +225,19 @@ public class Midi {
     	}
     	return Double.toString(time);
     }
+    //suggest a main channel according to the size of the track
+    public String getSuggestMainChannel() {
+    	int mainChannel = 0;
+    	double size = -1;
+    	for(int i = 0; i < newSequence.getTracks().length; ++i) {
+    		if(size < newSequence.getTracks()[i].size()) {
+    			size = newSequence.getTracks()[i].size();
+    			mainChannel = i;
+    		}
+    	}
+    	return Integer.toString(mainChannel+1);
+    	
+    }
     
     Midi(Sequence sequence,double tempo) throws InvalidMidiDataException {
     	divisionType = sequence.getDivisionType();
