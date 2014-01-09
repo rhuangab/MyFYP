@@ -24,10 +24,10 @@ public class MelodyParser {
     	
     	sequencer = MidiSystem.getSequencer();
     	
-        sequencer.open();
+        //sequencer.open();
         
         filename = "Turkey";
-        sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/"+filename+".mid"));
+        sequence = MidiSystem.getSequence(new File("midiLibrary/"+filename+".mid"));
         sequencer.setSequence(sequence);
        
         

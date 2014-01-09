@@ -23,6 +23,7 @@ public class Midi {
     public Sequence sequence;
     public Sequence newSequence;
     private float divisionType;
+
     
    //calculate timestamp for each MidiEvent
     public double calTickSize() {
@@ -151,38 +152,6 @@ public class Midi {
                     
                     int numChannel = sm.getChannel();
                     newTrack[numChannel].add(event);
-                    //System.out.println(" new tick size is " + )
-                    //System.out.print("Channel: " + sm.getChannel() + " ");
-                    if (sm.getCommand() == NOTE_ON) {
-                        int key = sm.getData1();
-                        int octave = (key / 12)-1;
-                        int note = key % 12;
-                        String noteName = NOTE_NAMES[note];
-                        int velocity = sm.getData2();
-                        if(velocity == 0) {
-                        	//System.out.println("Note off, " + noteName + octave + " key=" + key + " velocity: " + velocity);
-                        }else {
-                        	//System.out.println("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity);
-                        }
-             
-                    } else if (sm.getCommand() == NOTE_OFF) {
-                        int key = sm.getData1();
-                        int octave = (key / 12)-1;
-                        int note = key % 12;
-                        String noteName = NOTE_NAMES[note];
-                        int velocity = sm.getData2();
-                        //System.out.println("Note off, " + noteName + octave + " key=" + key + " velocity: " + velocity);
-                        
-                    } else if(sm.getCommand() == CONTROL_CHANGE) {
-                    	//System.out.println("this is message control change");
-                    	
-                    } else {
-                       // System.out.println("Command:" + sm.getCommand());
-                    }
-                    
-                } else {
-                	//newTrack[NUM_OF_TRACK-1].add(event);
-                    //System.out.println("Other message: " + message.getClass());
                 }
             }
         }

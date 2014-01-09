@@ -5,18 +5,29 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiEvent;
+import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 public class TestGUI extends JFrame{
 	private static String filename;
@@ -26,10 +37,13 @@ public class TestGUI extends JFrame{
 	private static Sequence sequence;
 	private static Sequence newSequence;
 	private static ArrayList<JButton> tracks;
-	private static ArrayList<JCheckBox> checkBox;
+	private static ArrayList<JRadioButton> radios;
+	private static ButtonGroup group;
 	private static int numChannel=10;
 	private static ArrayList<Integer> isOn;
 	private boolean paused;
+	private int mainChannel;
+	private HashSet<Integer> onNote;
 	
 	public static void main(String[] args) throws MidiUnavailableException, InvalidMidiDataException, IOException {
 		
@@ -66,7 +80,9 @@ public class TestGUI extends JFrame{
         sequencer = MidiSystem.getSequencer();
         sequencer.open();
 		//sequencer = player.getSequencer();
-	    sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/"+filename+".mid"));
+	    //sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/"+filename+".mid"));
+	    sequence = MidiSystem.getSequence(new File("midiLibrary/"+filename+".mid"));
+
 	    //myMidi = new Midi(sequence,player.getSequencer().getTempoInBPM());
 	    myMidi = new Midi(sequence,sequencer.getTempoInBPM());
 		newSequence = myMidi.newSequence; 
@@ -98,12 +114,12 @@ public class TestGUI extends JFrame{
         setSize(400,400);
         setLocationRelativeTo(null);
         tracks = new ArrayList();
-        checkBox = new ArrayList();
+        group = new ButtonGroup();
                 GridLayout lay = new GridLayout(1,2);
         setLayout(lay);
         
         JPanel myPanel = new JPanel();
-		GridLayout myLayout = new GridLayout(18,2);
+		GridLayout myLayout = new GridLayout(19,2);
 		myPanel.setLayout(myLayout);
 	
 		
@@ -135,7 +151,8 @@ public class TestGUI extends JFrame{
         	
         });
         myPanel.add(original);
-        JCheckBox original1 = new JCheckBox("Duration:" + myMidi.getFinishTime(true));
+        JLabel original1 = new JLabel("     Duration:" + myMidi.getFinishTime(true));
+       
         
         JButton separate = new JButton("New");
         separate.addActionListener(new ActionListener() {
@@ -165,7 +182,7 @@ public class TestGUI extends JFrame{
         	
         });
         
-        JCheckBox separate1 = new JCheckBox("Duration:" + myMidi.getFinishTime(false));
+        JLabel separate1 = new JLabel("     Duration:" + myMidi.getFinishTime(false));
         
         myPanel.add(original);
         myPanel.add(original1);
@@ -189,14 +206,19 @@ public class TestGUI extends JFrame{
         tracks.add(new JButton("15. Percussvie"));
         tracks.add(new JButton("16. Sound Effects"));
        
+        radios = new ArrayList();
         for(int i = 0 ;i < 16; ++i) {
-        	JCheckBox temp = new JCheckBox(myMidi.getChannelInfo(i));
+        	JRadioButton temp = new JRadioButton(myMidi.getChannelInfo(i));
         	if(myMidi.newSequence.getTracks()[i].size() > 1000)
         		temp.setForeground(Color.BLUE);
-             checkBox.add(temp);
+             group.add(temp);
+             radios.add(temp);
         		
         	
         }
+       
+        
+        //set up the buttons
         for(int i = 0; i < 16; ++i) {
         	myPanel.add(tracks.get(i));
         	tracks.get(i).addActionListener(new ActionListener() {
@@ -396,11 +418,30 @@ public class TestGUI extends JFrame{
         		
         	});
         	
-        	myPanel.add(checkBox.get(i));
+        	
+        	myPanel.add(radios.get(i));
         	
         	
         }
-       
+       JButton submit = new JButton("SUBMIT");
+       submit.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			//find the chosen radioButton 
+			try {
+				generateFeatureFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
+		}
+    	   
+       });
+       myPanel.add(submit);
         add(myPanel);
         
         
@@ -455,6 +496,64 @@ public class TestGUI extends JFrame{
 	//Returns the paused state.
 	public boolean isPaused() {
 		return paused;
+	}
+	
+	//
+	public int getSelectedButton() {
+		int count = 0;
+		  for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
+	            AbstractButton button = buttons.nextElement();
+	            count ++;
+	            if (button.isSelected())  {
+	            	return count;
+	            }
+		  }
+		  return count;
+	}
+	
+	
+	//generate feature file of the midi file
+	public void  generateFeatureFile() throws IOException {
+		onNote = new HashSet<Integer>();
+		mainChannel = getSelectedButton();
+		FileWriter output = new FileWriter("MidiFeature/"+filename +".txt");
+		FileWriter output2 = new FileWriter("MidiFeature2/"+filename +".txt");
+		Track mainTrack = newSequence.getTracks()[mainChannel];
+		for(int i = 0; i < mainTrack.size(); ++i) {
+			MidiEvent event = mainTrack.get(i);
+            MidiMessage message = event.getMessage();
+            if (message instanceof ShortMessage) {
+                ShortMessage sm = (ShortMessage) message;
+                //if it is NOTE_ON command
+                if(sm.getCommand() == 0x90) {
+                	output.write(Double.toString(event.getTick()* myMidi.tickSize) + "   ");
+                	if(sm.getData2() != 0) {
+                    	output.write(sm.getData1() + "   "+ sm.getData2() +"   NOTE_ON" + "\n");
+                    	onNote.add(new Integer(sm.getData1()));
+                	}
+                	else {
+                		output.write(sm.getData1() + "   "+ sm.getData2() +"   NOTE_ON" + "\n");
+                		onNote.remove(new Integer(sm.getData1()));
+                	}
+                	Object[] onnote =  onNote.toArray(); 
+                	if(onnote.length > 0) {
+                		output2.write(Double.toString(event.getTick()* myMidi.tickSize) + "   ");
+                		for(int k = 0; k < onnote.length; ++k) {
+                			Integer temp = (Integer) onnote[k];
+                			output2.write(temp +"   ");
+                			}
+                		output2.write("\n");  
+                	}
+                	  
+            }
+			
+		}
+		
+		}
+		if(output!=null)
+			output.close();
+		if(output2!=null)
+			output2.close();
 	}
 	
 
