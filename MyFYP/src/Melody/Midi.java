@@ -55,12 +55,12 @@ public class Midi {
     	FileWriter output = null;
     	if(old) {
     		sequence = this.sequence;
-    		output = new FileWriter("/Users/jenny/git/MyFYP/MyFYP/MidiInfoPack/old"+filename+".txt");
+    		output = new FileWriter("MidiInfoPack/old"+filename+".txt");
     		
     	}
     	else {
     		sequence = this.newSequence;
-    		output = new FileWriter("/Users/jenny/git/MyFYP/MyFYP/MidiInfoPack/new"+filename+".txt");
+    		output = new FileWriter("MidiInfoPack/new"+filename+".txt");
     	}
     	
     	output.write("There are total " + sequence.getTracks().length + " track in this midi file"+"\n");
@@ -147,12 +147,20 @@ public class Midi {
                 //tickSize = calTickSize();
                 //System.out.println("@" + event.getTick() * tickSize + " ");
                 MidiMessage message = event.getMessage();
+                
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
                     
                     int numChannel = sm.getChannel();
                     newTrack[numChannel].add(event);
                 }
+                
+                else {
+                	for(int j = 0; j < 16; j++)
+                		newTrack[j].add(event);
+                }
+                
+                
             }
         }
     	//System.out.println("original length is" + sequence.getTracks().length);
