@@ -57,7 +57,7 @@ public class TestGUI extends JFrame{
 	
 	TestGUI() throws MidiUnavailableException, InvalidMidiDataException, IOException {
 		
-		filename = "Without You";
+		filename = "A TIME FOR US";
 		
 		setUpPlayer();
 		
