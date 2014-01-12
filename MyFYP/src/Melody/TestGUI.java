@@ -522,8 +522,11 @@ public class TestGUI extends JFrame{
 		
 		FileWriter output = new FileWriter("MidiFeature/"+filename +".txt");
 		FileWriter output2 = new FileWriter("MidiFeature2/"+filename +".txt");
-		output.write(myMidi.getFinishTime(true) + "\n");
+		output.write("duration: " + myMidi.getFinishTime(true) + "\n");
+		output.write("main channel: " + mainChannel + "\n");
+		
 		output2.write(myMidi.getFinishTime(true) + "\n");
+		output2.write("main channel: " + mainChannel + "\n");
 		Track mainTrack = newSequence.getTracks()[mainChannel];
 		for(int i = 0; i < mainTrack.size(); ++i) {
 			MidiEvent event = mainTrack.get(i);
