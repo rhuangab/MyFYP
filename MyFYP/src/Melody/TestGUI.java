@@ -522,6 +522,8 @@ public class TestGUI extends JFrame{
 		
 		FileWriter output = new FileWriter("MidiFeature/"+filename +".txt");
 		FileWriter output2 = new FileWriter("MidiFeature2/"+filename +".txt");
+		output.write(myMidi.getFinishTime(true) + "\n");
+		output2.write(myMidi.getFinishTime(true) + "\n");
 		Track mainTrack = newSequence.getTracks()[mainChannel];
 		for(int i = 0; i < mainTrack.size(); ++i) {
 			MidiEvent event = mainTrack.get(i);
@@ -529,16 +531,25 @@ public class TestGUI extends JFrame{
             if (message instanceof ShortMessage) {
                 ShortMessage sm = (ShortMessage) message;
                 //if it is NOTE_ON command
-                if(sm.getCommand() == 0x90) {
+                if(sm.getCommand() == 0x80) {
+                	 output.write(Double.toString(event.getTick()* myMidi.tickSize) + "   ");
+                	//System.out.println("it is note off");
+            		output.write(sm.getData1() + "   "+ sm.getData2() +"   NOTE_OFF" + "\n");
+            		onNote.remove(new Integer(sm.getData1()));
+            		velocityMap.remove(sm.getData1());
+                }
+                else if(sm.getCommand() == 0x90) {
                 	output.write(Double.toString(event.getTick()* myMidi.tickSize) + "   ");
                 	if(sm.getData2() != 0) {
+                		//System.out.println("It is a note on");
                     	output.write(sm.getData1() + "   "+ sm.getData2() +"   NOTE_ON" + "\n");
                     	onNote.add(new Integer(sm.getData1()));
                     	velocityMap.put(sm.getData1(), sm.getData2());
                     	
                 	}
                 	else {
-                		output.write(sm.getData1() + "   "+ sm.getData2() +"   NOTE_ON" + "\n");
+                		//System.out.println("it is note off");
+                		output.write(sm.getData1() + "   "+ sm.getData2() +"   NOTE_OFF" + "\n");
                 		onNote.remove(new Integer(sm.getData1()));
                 		velocityMap.remove(sm.getData1());
                 	}

@@ -154,6 +154,7 @@ public class Midi {
                     int numChannel = sm.getChannel();
                     newTrack[numChannel].add(event);
                 }
+                
                 else {
                 	for(int j = 0; j < 16; j++)
                 		newTrack[j].add(event);
