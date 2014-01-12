@@ -1,13 +1,17 @@
 package Phonetic;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import DatabaseManager.DatabaseManager;
 
@@ -24,20 +28,26 @@ public class LrcParser {
 	private FileWriter log;
 	private String songName;
 	private HTree hashtable;
+	private PriorityQueue<String> priorityQueue;
+	private Pattern p;
 
 	public LrcParser(String sn) throws IOException {
 		songName = sn;		
 		hashtable = DatabaseManager.getHashtableSingleton();
 		phone = new FileWriter("phoneLibrary/" + songName + ".phone.txt");
 		cv = new FileWriter("cvLibrary/" + songName + ".cv.txt");
-		log = new FileWriter("log.txt");
+		log = new FileWriter("log.txt",true);
 		s = new Scanner(new BufferedReader(new FileReader(
 				"lrcLibrary/"+songName+".lrc")));
+		p = Pattern.compile("((\\[\\d{2}:\\d{2}\\.\\d{1,2}\\])((\\[\\d{2}:\\d{2}\\.\\d{1,2}\\])*))(.+)");
 	}
+	
+	
 
 	public void performParse() throws IOException {
 		String line;
-
+		//regular expression
+		
 		while (s.hasNextLine()) {
 			// System.out.println(s.nextLine());
 			line = s.nextLine();
@@ -45,6 +55,7 @@ public class LrcParser {
 				// find all the contents in the brackets [], also consider cases
 				// where there are multiple timestamps
 				int position = line.lastIndexOf("]");
+				
 				String timestamp = null;
 
 				if (position != -1) {
@@ -56,6 +67,8 @@ public class LrcParser {
 						line = null;
 					}
 				}
+				
+				
 
 				List<String> strArr = new ArrayList();
 				if (line != null) {
@@ -172,15 +185,25 @@ public class LrcParser {
 		for (int i = 0; i < strArr.size(); ++i) {
 			word = strArr.get(i);
 			word = removePunc(word);
-			word = removeAbb(word);
+			//word = removeAbb(word);
 			word = word.toUpperCase();
 			strArr.set(i, word.trim());
 		}
 	}
+	
+	public void parseAllLrcFromAFolder(File folder) throws IOException
+	{
+		File[] lrcList = folder.listFiles();
+		for(File lrcFile : lrcList)
+		{
+			LrcParser lrcParser = new LrcParser(lrcFile.getName());
+			lrcParser.performParse();
+		}
+	}
 
 	public static void main(String[] args) throws IOException {
-		LrcParser lrcParser = new LrcParser("we own it");
-		lrcParser.performParse();
+		LrcParser lrcParser = new LrcParser("A MOMENT LIKE THIS");
+		//lrcParser.sortTimeStamp();
 	}
 
 }
