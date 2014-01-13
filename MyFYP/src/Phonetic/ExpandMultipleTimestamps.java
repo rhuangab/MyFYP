@@ -1,13 +1,17 @@
 package Phonetic;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import FileLibraryPath.FileLibraryPath;
 
 public class ExpandMultipleTimestamps {
 	private Pattern timeStampPattern;
@@ -27,10 +31,16 @@ public class ExpandMultipleTimestamps {
 		for(File lrcFile : lrcList)
 		{
 			currentFile = lrcFile;
-			Scanner sc = new Scanner(lrcFile);
+			Scanner sc = new Scanner(new BufferedReader(new FileReader(lrcFile)));
 			lrcWriter = new FileWriter(new File(outputFolder.getPath()+"/"+lrcFile.getName()));
 			sortTimeStamp(sc);
 		}
+		/*File lrcFile = new File("/Users/apple/Downloads/song/lrc_midi_combine/lrc/ALL THE MAN THAT I NEED.lrc");
+		Scanner sc = new Scanner(new BufferedReader(new FileReader(lrcFile)));
+		
+		lrcWriter = new FileWriter(new File(outputFolder.getPath()+"/"+lrcFile.getName()));
+		sortTimeStamp(sc);*/
+		
 	}
 	
 	public void sortTimeStamp(Scanner sc) throws IOException
@@ -40,8 +50,10 @@ public class ExpandMultipleTimestamps {
 		while (sc.hasNextLine()) {
 			// System.out.println(s.nextLine());
 			String line = sc.nextLine();
+			//System.out.println(line+"1");
 			if (!line.equals("")) {
 				Matcher m1 = tagPattern.matcher(line);
+				//System.out.println(line+"2");
 				if(m1.matches())
 				{
 					lrcWriter.append(line+'\n');
@@ -80,8 +92,8 @@ public class ExpandMultipleTimestamps {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		File inputfolder = new File("/Users/apple/Downloads/song/lrc_midi_combine/lrc");
-		File outputfolder = new File("/Users/apple/Downloads/song/lrc_midi_combine/lrcExpanded");
+		File inputfolder = new File("/Users/apple/Documents/song/lrc_midi/lrcOrigin");
+		File outputfolder = FileLibraryPath.LrcLibraryFolder;
 		ExpandMultipleTimestamps expander = new ExpandMultipleTimestamps(inputfolder,outputfolder);
 		/*Pattern p = Pattern.compile("\\[ar:.*\\]|\\[ti:.*\\]|\\[al:.*\\]");
 		Matcher m = p.matcher("[ti:richeng]");

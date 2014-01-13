@@ -8,10 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import DatabaseManager.DatabaseManager;
 
@@ -19,43 +16,40 @@ import jdbm.RecordManager;
 import jdbm.RecordManagerFactory;
 import jdbm.htree.HTree;
 
+import FileLibraryPath.FileLibraryPath;
+
 public class LrcParser {
 
-	private String filename;
-	private Scanner s;
+	private Scanner sc;
 	private FileWriter phone;
 	private FileWriter cv;
 	private FileWriter log;
 	private String songName;
 	private HTree hashtable;
-	private PriorityQueue<String> priorityQueue;
-	private Pattern p;
 
-	public LrcParser(String sn) throws IOException {
-		songName = sn;		
-		hashtable = DatabaseManager.getHashtableSingleton();
-		phone = new FileWriter("phoneLibrary/" + songName + ".phone.txt");
-		cv = new FileWriter("cvLibrary/" + songName + ".cv.txt");
-		log = new FileWriter("log.txt",true);
-		s = new Scanner(new BufferedReader(new FileReader(
-				"lrcLibrary/"+songName+".lrc")));
-		p = Pattern.compile("((\\[\\d{2}:\\d{2}\\.\\d{1,2}\\])((\\[\\d{2}:\\d{2}\\.\\d{1,2}\\])*))(.+)");
+	public LrcParser(String sn, HTree ht) throws IOException {
+		songName = sn.replace(".lrc", "");
+		hashtable = ht;
+		phone = new FileWriter(FileLibraryPath.PhoneLibraryFolder.getPath() + "/"
+				+ songName + ".phone.txt");
+		cv = new FileWriter(FileLibraryPath.CvLibraryFolder.getPath() + "/" + songName
+				+ ".cv.txt");
+		log = new FileWriter("log.txt", true);
+		sc = new Scanner(new BufferedReader(new FileReader(
+				FileLibraryPath.LrcLibraryFolder.getPath() + "/" + songName+".lrc")));
 	}
-	
-	
 
 	public void performParse() throws IOException {
 		String line;
-		//regular expression
-		
-		while (s.hasNextLine()) {
+		boolean firstTimeToWriteLrcName = true;
+		while (sc.hasNextLine()) {
 			// System.out.println(s.nextLine());
-			line = s.nextLine();
+			line = sc.nextLine();
 			if (!line.equals("")) {
 				// find all the contents in the brackets [], also consider cases
 				// where there are multiple timestamps
 				int position = line.lastIndexOf("]");
-				
+
 				String timestamp = null;
 
 				if (position != -1) {
@@ -67,8 +61,6 @@ public class LrcParser {
 						line = null;
 					}
 				}
-				
-				
 
 				List<String> strArr = new ArrayList();
 				if (line != null) {
@@ -94,6 +86,10 @@ public class LrcParser {
 							// System.out.println(myWord.word + "  " +
 							// myWord.stress + "  " + myWord.cv);
 						} else {
+							if (firstTimeToWriteLrcName) {
+								log.write("/****"+songName + ".lrc ****/\n");
+								firstTimeToWriteLrcName = false;
+							}
 							log.write(strArr.get(i) + "    ");
 							log.write("\n");
 							phone.write("UNDEF" + " ");
@@ -106,17 +102,15 @@ public class LrcParser {
 					cv.write("\n");
 				}
 
-				System.out.print(timestamp);
-				for (int i = 0; i < strArr.size(); ++i) {
-					System.out.print("[" + strArr.get(i) + "]");
-				}
-				System.out.println();
-
+				/*
+				 * System.out.print(timestamp); for (int i = 0; i <
+				 * strArr.size(); ++i) { System.out.print("[" + strArr.get(i) +
+				 * "]"); } System.out.println();
+				 */
 			}
 		}
-
-		if (s != null)
-			s.close();
+		if (sc != null)
+			sc.close();
 		if (phone != null)
 			phone.close();
 		if (cv != null)
@@ -124,12 +118,10 @@ public class LrcParser {
 		if (log != null)
 			log.close();
 
-		// recman.commit();
-		DatabaseManager.commitAndClose();
 	}
 
 	// judge if a a character is a punctuation
-	public static String removePunc(String s) {
+	public String removePunc(String s) {
 		s = s.replace('!', '\0');
 		s = s.replace('?', '\0');
 		s = s.replace(',', '\0');
@@ -140,70 +132,65 @@ public class LrcParser {
 		return s;
 	}
 
-	public static String expandNum(String s) {
-
-		if (s.contains("0"))
-			s = s.replace("0", " ZERO ");
-		else if (s.contains("1"))
-			s = s.replace("1", " ONE ");
-		else if (s.contains("2"))
-			s = s.replace("2", " TWO ");
-		else if (s.contains("3"))
-			s = s.replace("3", " THREE ");
-		else if (s.contains("4"))
-			s = s.replace("4", " FOUR ");
-		else if (s.contains("5"))
-			s = s.replace("5", " FIVE ");
-		else if (s.contains("6"))
-			s = s.replace("6", " SIX ");
-		else if (s.contains("7"))
-			s = s.replace("7", " SEVEN ");
-		else if (s.contains("8"))
-			s = s.replace("8", " EIGHT ");
-		else if (s.contains("9"))
-			s = s.replace("9", " NINE ");
+	public String expandNum(String s) {
+		s = s.replace("0", " ZERO ");
+		s = s.replace("1", " ONE ");
+		s = s.replace("2", " TWO ");
+		s = s.replace("3", " THREE ");
+		s = s.replace("4", " FOUR ");
+		s = s.replace("5", " FIVE ");
+		s = s.replace("6", " SIX ");
+		s = s.replace("7", " SEVEN ");
+		s = s.replace("8", " EIGHT ");
+		s = s.replace("9", " NINE ");
 		return s;
 
 	}
 
 	// remove some abbreviation(including possessive, abbreviation for am,
 	// is,have and so on)
-	public static String removeAbb(String s) {
-		s = s.replace("'s", "");
+	public String removeAbb(String s) {
+		/*s = s.replace("'s", "");
 		s = s.replace("'ve", "");
 		s = s.replace("'m", "");
-		s = s.replace("'ll", "");
+		s = s.replace("'ll", "");*/
 		return s;
 	}
 
 	// preprocess one: capitalize every letter, remove possessive and
 	// abbreviation('s, 'm, 've, '), and all the punctuation(one time one
 	// sentence)
-	public static void preprocessOne(List<String> strArr) {
+	public void preprocessOne(List<String> strArr) {
 		// ArrayList<String> newList = new ArrayList<String>();
 		String word;
 		for (int i = 0; i < strArr.size(); ++i) {
 			word = strArr.get(i);
 			word = removePunc(word);
-			//word = removeAbb(word);
+			// word = removeAbb(word);
 			word = word.toUpperCase();
 			strArr.set(i, word.trim());
 		}
 	}
-	
-	public void parseAllLrcFromAFolder(File folder) throws IOException
-	{
+
+	public static void parseAllLrcFromAFolder(File folder) throws IOException {
 		File[] lrcList = folder.listFiles();
-		for(File lrcFile : lrcList)
-		{
-			LrcParser lrcParser = new LrcParser(lrcFile.getName());
+		HTree hashtable = DatabaseManager.getHashtableSingleton();
+		for (File lrcFile : lrcList) {
+			LrcParser lrcParser = new LrcParser(lrcFile.getName(), hashtable);
 			lrcParser.performParse();
 		}
+		// recman.commit();
+		DatabaseManager.close();
+		
 	}
 
 	public static void main(String[] args) throws IOException {
-		LrcParser lrcParser = new LrcParser("A MOMENT LIKE THIS");
-		//lrcParser.sortTimeStamp();
+		// LrcParser lrcParser = new LrcParser("A MOMENT LIKE THIS");
+		// lrcParser.sortTimeStamp();
+		/** Before running, please change the encoding type to UTF-8.
+		 * Encoding type could be set in Run Configuration->Common.
+		 */
+		parseAllLrcFromAFolder(FileLibraryPath.LrcLibraryFolder);
 	}
 
 }
