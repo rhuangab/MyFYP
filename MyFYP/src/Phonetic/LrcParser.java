@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
 
 import DatabaseManager.DatabaseManager;
 
@@ -26,22 +30,24 @@ public class LrcParser {
 	private FileWriter log;
 	private String songName;
 	private HTree hashtable;
+	private Set<String> uniqueWords;
 
 	public LrcParser(String sn, HTree ht) throws IOException {
 		songName = sn.replace(".lrc", "");
 		hashtable = ht;
-		phone = new FileWriter(FileLibraryPath.PhoneLibraryFolder.getPath() + "/"
-				+ songName + ".phone.txt");
-		cv = new FileWriter(FileLibraryPath.CvLibraryFolder.getPath() + "/" + songName
-				+ ".cv.txt");
+		phone = new FileWriter(FileLibraryPath.PhoneLibraryFolder.getPath()
+				+ "/" + songName + ".phone.txt");
+		cv = new FileWriter(FileLibraryPath.CvLibraryFolder.getPath() + "/"
+				+ songName + ".cv.txt");
 		log = new FileWriter("log.txt", true);
 		sc = new Scanner(new BufferedReader(new FileReader(
-				FileLibraryPath.LrcLibraryFolder.getPath() + "/" + songName+".lrc")));
+				FileLibraryPath.LrcLibraryFolder.getPath() + "/" + songName
+						+ ".lrc")));
+		uniqueWords = new TreeSet<String>();
 	}
 
 	public void performParse() throws IOException {
 		String line;
-		boolean firstTimeToWriteLrcName = true;
 		while (sc.hasNextLine()) {
 			// System.out.println(s.nextLine());
 			line = sc.nextLine();
@@ -86,12 +92,7 @@ public class LrcParser {
 							// System.out.println(myWord.word + "  " +
 							// myWord.stress + "  " + myWord.cv);
 						} else {
-							if (firstTimeToWriteLrcName) {
-								log.write("/****"+songName + ".lrc ****/\n");
-								firstTimeToWriteLrcName = false;
-							}
-							log.write(strArr.get(i) + "    ");
-							log.write("\n");
+							uniqueWords.add(strArr.get(i));
 							phone.write("UNDEF" + " ");
 							cv.write("UNDEF" + "  ");
 							// System.out.println(strArr.get(i) +
@@ -109,6 +110,8 @@ public class LrcParser {
 				 */
 			}
 		}
+		writeToLog();
+
 		if (sc != null)
 			sc.close();
 		if (phone != null)
@@ -118,6 +121,16 @@ public class LrcParser {
 		if (log != null)
 			log.close();
 
+	}
+
+	public void writeToLog() throws IOException {
+		if (!uniqueWords.isEmpty()) {
+			java.util.Iterator<String> iter = uniqueWords.iterator();
+			log.write("[ti:" + songName + ".lrc]\n");
+			while (iter.hasNext()) {
+				log.write(iter.next() + "\n");
+			}
+		}
 	}
 
 	// judge if a a character is a punctuation
@@ -150,10 +163,10 @@ public class LrcParser {
 	// remove some abbreviation(including possessive, abbreviation for am,
 	// is,have and so on)
 	public String removeAbb(String s) {
-		/*s = s.replace("'s", "");
-		s = s.replace("'ve", "");
-		s = s.replace("'m", "");
-		s = s.replace("'ll", "");*/
+		/*
+		 * s = s.replace("'s", ""); s = s.replace("'ve", ""); s =
+		 * s.replace("'m", ""); s = s.replace("'ll", "");
+		 */
 		return s;
 	}
 
@@ -181,14 +194,15 @@ public class LrcParser {
 		}
 		// recman.commit();
 		DatabaseManager.close();
-		
+
 	}
 
 	public static void main(String[] args) throws IOException {
 		// LrcParser lrcParser = new LrcParser("A MOMENT LIKE THIS");
 		// lrcParser.sortTimeStamp();
-		/** Before running, please change the encoding type to UTF-8.
-		 * Encoding type could be set in Run Configuration->Common.
+		/**
+		 * Before running, please change the encoding type to UTF-8. Encoding
+		 * type could be set in Run Configuration->Common.
 		 */
 		parseAllLrcFromAFolder(FileLibraryPath.LrcLibraryFolder);
 	}
