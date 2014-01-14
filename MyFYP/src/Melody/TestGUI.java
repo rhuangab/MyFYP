@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 public class TestGUI extends JFrame{
-	private static String filename;
+	private static File filename;
 	private static MidiPlayer player;
 	private static Midi myMidi;
 	private static Sequencer sequencer;
@@ -46,9 +46,14 @@ public class TestGUI extends JFrame{
 	private int mainChannel;
 	private HashSet<Integer> onNote;
 	private HashMap<Integer,Integer> velocityMap;
+	private static File[] myList;
+	private static int count;//the number of the file in the folder that we are currently dealing with
+	private static JButton back;
+	private static JButton next;
 	
 	public static void main(String[] args) throws MidiUnavailableException, InvalidMidiDataException, IOException {
-		
+		getAllFilePath();
+		count = 0;
 		new TestGUI();
 		
 	}
@@ -57,7 +62,7 @@ public class TestGUI extends JFrame{
 	
 	TestGUI() throws MidiUnavailableException, InvalidMidiDataException, IOException {
 		
-		filename = "A TIME FOR US";
+		filename = myList[0];
 		
 		setUpPlayer();
 		
@@ -71,6 +76,8 @@ public class TestGUI extends JFrame{
 		}
 		
 		close();
+		if(sequencer.isOpen())
+			sequencer.close();
 	
 		//player.close();
 		
@@ -79,11 +86,14 @@ public class TestGUI extends JFrame{
 	//set up player 
 	public void setUpPlayer() throws InvalidMidiDataException, IOException, MidiUnavailableException {
        // MidiPlayer player = new MidiPlayer();
+		//System.out.println("reset the player" + filename);
         sequencer = MidiSystem.getSequencer();
         sequencer.open();
 		//sequencer = player.getSequencer();
-	    //sequence = MidiSystem.getSequence(new File("/Users/jenny/git/MyFYP/MyFYP/midiLibrary/"+filename+".mid"));
-	    sequence = MidiSystem.getSequence(new File("midiLibrary/"+filename+".mid"));
+	    //sequence = MidiSystem.getSequence(new File("D:\\eclipseWorkspace\\fyp\\MyFYP\\midiLibrary\\CRAZY.mid"));
+	    //sequence = MidiSystem.getSequence(new File("midiLibrary/"+filename+".mid"));
+        sequence = MidiSystem.getSequence(filename);
+	    
 
 	    //myMidi = new Midi(sequence,player.getSequencer().getTempoInBPM());
 	    myMidi = new Midi(sequence,sequencer.getTempoInBPM());
@@ -113,16 +123,88 @@ public class TestGUI extends JFrame{
 	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle(filename + "  suggested: " + myMidi.getSuggestMainChannel());
-        setSize(400,400);
+        setSize(800,500);
         setLocationRelativeTo(null);
         tracks = new ArrayList();
         group = new ButtonGroup();
                 GridLayout lay = new GridLayout(1,2);
         setLayout(lay);
         
-        JPanel myPanel = new JPanel();
-		GridLayout myLayout = new GridLayout(19,2);
+        final JPanel myPanel = new JPanel();
+		GridLayout myLayout = new GridLayout(20,2);
 		myPanel.setLayout(myLayout);
+		
+		back =  new JButton("Back");
+		back.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				filename = myList[count];
+				if(sequencer.isOpen())
+					sequencer.close();
+				try {
+					setUpPlayer();
+				} catch (InvalidMidiDataException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (MidiUnavailableException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				remove(myPanel);
+				//add(myPanel);
+				//show();
+				//myPanel.repaint();
+				makeGUI();
+				if(count > 0)
+					count--;
+				
+			}
+			
+		});
+		myPanel.add(back);
+		
+		next = new JButton("Next");
+		next.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//System.out.println("Get into next");
+				// TODO Auto-generated method stub
+				filename = myList[count];
+				if(sequencer.isOpen()) 
+					sequencer.close();
+				try {
+					setUpPlayer();
+				} catch (InvalidMidiDataException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (MidiUnavailableException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				//myPanel.repaint();
+				remove(myPanel);
+				makeGUI();
+				//add(myPanel);
+				//show();
+				//revalidate();
+				//myPanel.repaint();
+				if(count < myList.length - 1)
+					count++;
+			}
+			
+		});
+		myPanel.add(next);
+		
+		
 	
 		
         JButton original = new JButton("Original");
@@ -527,7 +609,7 @@ public class TestGUI extends JFrame{
 		
 		output2.write(myMidi.getFinishTime(true) + "\n");
 		output2.write("main channel: " + mainChannel + "\n");
-		Track mainTrack = newSequence.getTracks()[mainChannel];
+		Track mainTrack = newSequence.getTracks()[mainChannel-1];
 		for(int i = 0; i < mainTrack.size(); ++i) {
 			MidiEvent event = mainTrack.get(i);
             MidiMessage message = event.getMessage();
@@ -574,6 +656,15 @@ public class TestGUI extends JFrame{
 			output.close();
 		if(output2!=null)
 			output2.close();
+	}
+	
+	//get file names of the midiFile 
+	public static void getAllFilePath() {
+		File current = new File("D:\\eclipseWorkspace\\fyp\\MyFYP\\midiLibrary");
+		myList = current.listFiles();
+		/*for(File name: myList) {
+			System.out.println(name);
+		}*/
 	}
 	
 

@@ -26,7 +26,7 @@ public class MelodyParser {
     	
         //sequencer.open();
         
-        filename = "Turkey";
+        filename = "Blue - You Make Me Wanna";
         sequence = MidiSystem.getSequence(new File("midiLibrary/"+filename+".mid"));
         sequencer.setSequence(sequence);
        
