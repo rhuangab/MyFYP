@@ -527,7 +527,7 @@ public class TestGUI extends JFrame{
 		
 		output2.write(myMidi.getFinishTime(true) + "\n");
 		output2.write("main channel: " + mainChannel + "\n");
-		Track mainTrack = newSequence.getTracks()[mainChannel];
+		Track mainTrack = newSequence.getTracks()[mainChannel-1];
 		for(int i = 0; i < mainTrack.size(); ++i) {
 			MidiEvent event = mainTrack.get(i);
             MidiMessage message = event.getMessage();
