@@ -602,8 +602,14 @@ public class TestGUI extends JFrame{
 		velocityMap = new HashMap<Integer,Integer>();
 		mainChannel = getSelectedButton();
 		
-		FileWriter output = new FileWriter("MidiFeature/"+filename +".txt");
-		FileWriter output2 = new FileWriter("MidiFeature2/"+filename +".txt");
+		//get file name
+		String temp = filename.toString();
+		int pos = temp.lastIndexOf("\\");
+		temp = temp.substring(pos+1, filename.toString().length()-4);
+		System.out.println("test: " + filename + "  " + temp);
+		
+		FileWriter output = new FileWriter("MidiFeature/"+temp +".txt");
+		FileWriter output2 = new FileWriter("MidiFeature2/"+temp +".txt");
 		output.write("duration: " + myMidi.getFinishTime(true) + "\n");
 		output.write("main channel: " + mainChannel + "\n");
 		
@@ -660,7 +666,8 @@ public class TestGUI extends JFrame{
 	
 	//get file names of the midiFile 
 	public static void getAllFilePath() {
-		File current = new File("D:\\eclipseWorkspace\\fyp\\MyFYP\\midiLibrary");
+		//File current = new File("D:\\eclipseWorkspace\\fyp\\MyFYP\\midiLibrary");
+		File current = new File("midiLibrary/");
 		myList = current.listFiles();
 		/*for(File name: myList) {
 			System.out.println(name);
