@@ -2,26 +2,48 @@ package MucisXML;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import org.dom4j.Element;
 
 public class MyPart {
 
-	private List<MyMeasure> measureList;
+	private List<MySingleWord> wordList;
+	private Iterator<MySingleWord> itr;
+	private Iterator<MySingleWord> itr2;
+	private MySingleWord currentWord;
 	
-	public MyPart(){
-		measureList = null;
+	public MyPart(List<MySingleWord> TwordList){
+		wordList = TwordList;
+		itr = wordList.iterator();
+		itr2 = wordList.iterator();
 	}
 	
-	public MyPart(List<MyMeasure> TmeasureList){
-		measureList = TmeasureList;
+	public MySingleWord getNextWord()
+	{
+		if(itr.hasNext())
+			return itr.next();
+		return null;
 	}
+	
+	public MyNote getNextNote()
+	{
+		if((currentWord == null || !currentWord.hasNextNote())&& itr2.hasNext())
+		{
+			currentWord = itr2.next();
+		}
+		else if((currentWord == null || !currentWord.hasNextNote())&& !itr2.hasNext()) return null;
+		else if(currentWord.hasNextNote())
+			return currentWord.getNextNote();
+		return null;
+	}
+	
 	
 	public void returnPattern(){
-		for (Iterator i = measureList.iterator(); i.hasNext();) { 
-			MyMeasure measure = (MyMeasure) i.next();
+		for (Iterator i = wordList.iterator(); i.hasNext();) { 
+			MySingleWord singleWord = (MySingleWord) i.next();
 			
-			for (Iterator j = measure.getNotes().iterator(); j.hasNext();) { 
+			for (Iterator j = singleWord.getNotes().iterator(); j.hasNext();) { 
 				MyNote note = (MyNote) j.next();
 				if (note.whetherWanted()){
 					//System.out.print("[" + note.getLyricContent() + " ");
@@ -32,30 +54,33 @@ public class MyPart {
 		}
 	}
 	
-	public void returnLyricsByWords(){
+	public String returnLyricsByWords(){
+		String output = "";
 		String iLyric = "";
-		for (Iterator i = measureList.iterator(); i.hasNext();) { 
+		for (Iterator i = wordList.iterator(); i.hasNext();) { 
 			
-			MyMeasure measure = (MyMeasure) i.next();
-			for (Iterator j = measure.getNotes().iterator(); j.hasNext();) { 
+			MySingleWord singleWord = (MySingleWord) i.next();
+			output += singleWord.getWordText() + " ";
+			/*for (Iterator j = singleWord.getNotes().iterator(); j.hasNext();) { 
 				
 				MyNote note = (MyNote) j.next();
 				if (note.whetherWanted()){
 					if (note.getSyllable().equals("single"))
-						System.out.print(note.getLyricContent() + " ");
+						output += note.getLyricContent() + " ";
 					else if (note.getSyllable().equals("begin"))
 						iLyric = note.getLyricContent();
 					else if (note.getSyllable().equals("middle"))
 						iLyric += note.getLyricContent();
 					else if (note.getSyllable().equals("end")){
 						iLyric += note.getLyricContent();
-						System.out.print(iLyric + " ");
+						output += iLyric + " ";
 						iLyric = "";
 					}
 					else; // Exception handling
 					//System.out.print(note.getLyricContent() + " ");
 				}
-			}
+			}*/
 		}
+		return output;
 	}
 }

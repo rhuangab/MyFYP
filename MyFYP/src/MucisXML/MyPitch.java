@@ -15,6 +15,11 @@ public class MyPitch {
 	}
 	
 	public String getMPitch(){
-		return (octave + step);
+		return (step+octave);
+	}
+	
+	public int getDigitalValue()
+	{
+		return 0;
 	}
 }

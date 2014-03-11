@@ -6,7 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -30,20 +33,24 @@ public class LrcParser {
 	private FileWriter log;
 	private String songName;
 	private HTree hashtable;
-	private Set<String> uniqueWords;
+	private Set<String> uniqueWordsInAllLrcs;
+	private Set<String> uniqueWordsInOneLrc;
+	private File m_dateFolder;
 
-	public LrcParser(String sn, HTree ht) throws IOException {
+	public LrcParser(String sn, HTree ht, Set<String> uw, File dateFolder) throws IOException {
 		songName = sn.replace(".lrc", "");
 		hashtable = ht;
-		phone = new FileWriter(FileLibraryPath.PhoneLibraryFolder.getPath()
-				+ "/" + songName + ".phone.txt");
-		cv = new FileWriter(FileLibraryPath.CvLibraryFolder.getPath() + "/"
+		phone = new FileWriter(dateFolder.getPath()
+				+ "/phoneLibrary/" + songName + ".phone.txt");
+		cv = new FileWriter(dateFolder.getPath() + "/cvLibrary/"
 				+ songName + ".cv.txt");
-		log = new FileWriter("log.txt", true);
+		//log = new FileWriter("log.txt", true);
 		sc = new Scanner(new BufferedReader(new FileReader(
 				FileLibraryPath.LrcLibraryFolder.getPath() + "/" + songName
 						+ ".lrc")));
-		uniqueWords = new TreeSet<String>();
+		uniqueWordsInAllLrcs = uw;
+		uniqueWordsInOneLrc = new TreeSet<String>();
+		m_dateFolder = dateFolder;
 	}
 
 	public void performParse() throws IOException {
@@ -72,6 +79,7 @@ public class LrcParser {
 				if (line != null) {
 					// expand all the numbers in the sentence
 					line = expandNum(line);
+					line = preprocessOne(line);	
 					String[] strArr1 = line.split(" ");
 					for (int i = 0; i < strArr1.length; ++i) {
 						// trim the blank spaces at the ends of the words
@@ -82,7 +90,6 @@ public class LrcParser {
 					phone.write(timestamp);
 					cv.write(timestamp);
 
-					preprocessOne(strArr);
 					for (int i = 0; i < strArr.size(); ++i) {
 						WordStruct myWord = (WordStruct) hashtable.get(strArr
 								.get(i));
@@ -92,7 +99,8 @@ public class LrcParser {
 							// System.out.println(myWord.word + "  " +
 							// myWord.stress + "  " + myWord.cv);
 						} else {
-							uniqueWords.add(strArr.get(i));
+							uniqueWordsInAllLrcs.add(strArr.get(i));
+							uniqueWordsInOneLrc.add(strArr.get(i));
 							phone.write("UNDEF" + " ");
 							cv.write("UNDEF" + "  ");
 							// System.out.println(strArr.get(i) +
@@ -110,7 +118,7 @@ public class LrcParser {
 				 */
 			}
 		}
-		writeToLog();
+		writeToLogFromOneLrc();
 
 		if (sc != null)
 			sc.close();
@@ -122,26 +130,54 @@ public class LrcParser {
 			log.close();
 
 	}
-
-	public void writeToLog() throws IOException {
-		if (!uniqueWords.isEmpty()) {
-			java.util.Iterator<String> iter = uniqueWords.iterator();
-			log.write("[ti:" + songName + ".lrc]\n");
+	
+	public void writeToLogFromOneLrc() throws IOException
+	{
+		File log_withLrcName = new File(m_dateFolder.getPath()+"/log/log_withLrcName.txt");
+		if(!log_withLrcName.getParentFile().exists())
+			log_withLrcName.getParentFile().mkdir();
+		FileWriter log = new FileWriter(log_withLrcName, true);
+		if (!uniqueWordsInOneLrc.isEmpty()) {
+			log.write("["+songName+".lrc]\n");
+			java.util.Iterator<String> iter = uniqueWordsInOneLrc.iterator();
+			//log.write("[ti:" + songName + ".lrc]\n");
 			while (iter.hasNext()) {
 				log.write(iter.next() + "\n");
 			}
 		}
+		log.close();
+	}
+	
+	public static String getCurrentDate()
+	{
+		DateFormat df = new SimpleDateFormat("MMM.dd @ HH.mm");
+		return df.format(new Date());
+	}
+
+	public static void writeToLogTogether(Set<String> uniqueWords,String cd) throws IOException {
+		File log_noLrc = new File(FileLibraryPath.DataOutputFolder.getPath()+"/"+cd+"/log/log_noLrcName.txt");
+		if(!log_noLrc.getParentFile().exists())
+			log_noLrc.getParentFile().mkdir();
+		FileWriter log = new FileWriter(log_noLrc, true);
+		if (!uniqueWords.isEmpty()) {
+			java.util.Iterator<String> iter = uniqueWords.iterator();
+			//log.write("[ti:" + songName + ".lrc]\n");
+			while (iter.hasNext()) {
+				log.write(iter.next() + "\n");
+			}
+		}
+		log.close();
 	}
 
 	// judge if a a character is a punctuation
 	public String removePunc(String s) {
-		s = s.replace('!', '\0');
-		s = s.replace('?', '\0');
-		s = s.replace(',', '\0');
-		s = s.replace('.', '\0');
-		s = s.replace('(', '\0');
-		s = s.replace(')', '\0');
-
+		s = s.replace('!', ' ');
+		s = s.replace('?', ' ');
+		s = s.replace(',', ' ');
+		s = s.replace('.', ' ');
+		s = s.replace('(', ' ');
+		s = s.replace(')', ' ');
+		s = s.replace("-", "");
 		return s;
 	}
 
@@ -173,25 +209,37 @@ public class LrcParser {
 	// preprocess one: capitalize every letter, remove possessive and
 	// abbreviation('s, 'm, 've, '), and all the punctuation(one time one
 	// sentence)
-	public void preprocessOne(List<String> strArr) {
+	public String preprocessOne(String line) {
 		// ArrayList<String> newList = new ArrayList<String>();
-		String word;
+		/*String word;
 		for (int i = 0; i < strArr.size(); ++i) {
 			word = strArr.get(i);
 			word = removePunc(word);
 			// word = removeAbb(word);
 			word = word.toUpperCase();
 			strArr.set(i, word.trim());
-		}
+		}*/
+		line = removePunc(line);
+		line = line.toUpperCase();
+		return line;
 	}
 
 	public static void parseAllLrcFromAFolder(File folder) throws IOException {
 		File[] lrcList = folder.listFiles();
+		String cd = getCurrentDate();
+		File phoneLibraryFolder = new File(FileLibraryPath.DataOutputFolder.getPath()+"/"+cd+"/phoneLibrary/");
+		File cvLibraryFolder = new File(FileLibraryPath.DataOutputFolder.getPath()+"/"+cd+"/cvLibrary/");
+		phoneLibraryFolder.mkdirs();
+		cvLibraryFolder.mkdir();
+		File dateFolder = phoneLibraryFolder.getParentFile();
+		
 		HTree hashtable = DatabaseManager.getHashtableSingleton();
+		Set<String> uniqueWords = new TreeSet<String>();
 		for (File lrcFile : lrcList) {
-			LrcParser lrcParser = new LrcParser(lrcFile.getName(), hashtable);
+			LrcParser lrcParser = new LrcParser(lrcFile.getName(), hashtable,uniqueWords,dateFolder);
 			lrcParser.performParse();
 		}
+		writeToLogTogether(uniqueWords,cd);
 		// recman.commit();
 		DatabaseManager.close();
 

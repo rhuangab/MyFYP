@@ -7,15 +7,20 @@ public class MyNote {
 	private String type = "quarter";
 	private MyLyric lyric;
 	private boolean IsWanted = false;
+	private int rythm;
 	
 	public MyNote(){
 	    pitch = new MyPitch();
 	    lyric = new MyLyric();
+	    rythm = 0;
 	}
 	
 	public MyNote(String dur, String typ){
+		pitch = new MyPitch();
+	    lyric = new MyLyric();
 		duration = dur;
 		type = typ;
+		rythm = 0;
 	}
 	
 	public void setPitch(MyPitch Tpitch){
@@ -46,6 +51,18 @@ public class MyNote {
 		return lyric.getSyllabic();
 	}
 	
+	public int getRythm() {
+		return rythm;
+	}
+	
+	public void setRythm(int s){
+		rythm = s;
+	}
+	
+	public String getType()
+	{
+		return type;
+	}
 	
 	
 }

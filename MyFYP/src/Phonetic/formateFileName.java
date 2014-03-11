@@ -9,7 +9,7 @@ public class formateFileName {
 		File[] filelist = folder.listFiles();
 		for(File file : filelist)
 		{
-			if(!file.renameTo(new File(file.getParent()+"/"+file.getName().replace("IN'", "ING"))))
+			if(!file.renameTo(new File(file.getParent()+"/"+file.getName().toLowerCase())))
 				System.out.println(file.getName()+": Rename fails.");
 			/*if(file.getName().contains(".lrc"))
 				file.renameTo(new File(file.getParent()+"/"+file.getName().replace(".lrc", "").trim()+".lrc"));*/
@@ -48,9 +48,9 @@ public class formateFileName {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		File file = new File("/Users/apple/Downloads/song/lrc_midi");
-		//formateFileName(file);
-		checkFileName(file);
+		File file = new File("/Users/apple/Documents/song/lrc_midi/test");
+		formateFileName(file);
+		//checkFileName(file);
 		//System.out.print(file.getParent());
 		
 	}
