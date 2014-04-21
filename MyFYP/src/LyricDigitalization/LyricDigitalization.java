@@ -57,22 +57,6 @@ public class LyricDigitalization {
 		}
 	}
 	
-	public int pitchTranslate(String pitch)
-	{
-		int base[] = {9,11,0,2,4,5,7};
-		int result = 0;
-		if((pitch.charAt(0) == 'A' || pitch.charAt(0) == 'B') && pitch.substring(1).equals("10"))
-			throw new NullPointerException();
-		else if(pitch.charAt(0) >= 'A' && pitch.charAt(0) <= 'G')
-		{
-			result = base[pitch.charAt(0) - 'A'] + Integer.parseInt(pitch.substring(1))*12;
-		}
-		else{
-			System.out.println(pitch);
-			throw new NullPointerException();
-		}
-		return result;
-	}
 
 	public void outputPitchAndSyllablesToFile(String filename) throws IOException {
 		String outputFolderPath = FileLibraryPath.ParserOutputFolder.getPath();
@@ -161,8 +145,9 @@ public class LyricDigitalization {
 					String smallStress = getStress(curNote.getLyricContent());
 					outputString += curNote.getLyricContent() + ","
 							+ smallStress.substring(0, 1) + ","
-							+ pitchTranslate(curNote.getPitchValue()) + ","
-							+ curNote.getRythm() + '\n';
+							+ curNote.getPitchValue() + ","
+							+ curNote.getRythm() + ','
+							+ curNote.getDuration() + '\n';
 				}
 				fileWriter.print(outputString);
 			}
@@ -196,8 +181,9 @@ public class LyricDigitalization {
 			MyNote currentNote = singleWord.getNextNote();
 			outputString += currentNote.getLyricContent() + ","
 					+  stress.substring(i, i + 1) + ","
-					+ pitchTranslate(currentNote.getPitchValue()) + ","
-					+ currentNote.getRythm() + '\n';
+					+ currentNote.getPitchValue() + ","
+					+ currentNote.getRythm() + ','
+					+ currentNote.getDuration() + '\n';
 			
 		}
 		return outputString;

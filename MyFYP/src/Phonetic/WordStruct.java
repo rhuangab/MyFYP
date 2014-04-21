@@ -1,5 +1,6 @@
 package Phonetic;
 
+
 import java.util.List;
 
 public class WordStruct implements java.io.Serializable {

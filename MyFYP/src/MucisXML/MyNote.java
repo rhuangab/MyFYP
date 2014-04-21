@@ -3,7 +3,7 @@ package MucisXML;
 public class MyNote {
 
 	private MyPitch pitch;
-	private String duration = "0";
+	private int duration;
 	private String type = "quarter";
 	private MyLyric lyric;
 	private boolean IsWanted = false;
@@ -15,10 +15,10 @@ public class MyNote {
 	    rythm = 0;
 	}
 	
-	public MyNote(String dur, String typ){
+	public MyNote(String typ){
 		pitch = new MyPitch();
 	    lyric = new MyLyric();
-		duration = dur;
+		duration = 0;
 		type = typ;
 		rythm = 0;
 	}
@@ -39,12 +39,22 @@ public class MyNote {
 		return IsWanted;
 	}
 	
+	public void setDur(int dur)
+	{
+		duration = dur;
+	}
+	
+	public int getDuration()
+	{
+		return duration;
+	}
+	
 	public String getLyricContent(){
 		return lyric.getLyric();
 	}
 	
-	public String getPitchValue(){
-		return pitch.getMPitch();
+	public int getPitchValue(){
+		return pitch.getPitchValue();
 	}
 	
 	public String getSyllable(){

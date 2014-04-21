@@ -103,8 +103,7 @@ public class XMLParser {
 				// List<MyNote> noteList = new ArrayList<MyNote>();
 				for (Iterator j = NoteNodes.iterator(); j.hasNext();) {
 					Element e_note = (Element) j.next();
-					MyNote note = new MyNote(e_note.element("duration")
-							.getText(), e_note.element("type").getText());
+					MyNote note = new MyNote(e_note.element("type").getText());
 					//System.out.println(xmlFile.getName() + " " +mainPart.attributeValue("id")+" "+ e_measure.attributeValue("number"));
 					//System.out.println(String.format("%d+%d+%d", beatsType,beats,(curTotal/stepSize)+1));
 					//temp
@@ -112,14 +111,21 @@ public class XMLParser {
 						curTotal = maxTotal-1;
 					note.setRythm(FileLibraryPath.beatsMap.get(String.format("%d+%d+%d", beatsType,beats,(curTotal/stepSize)+1)));
 					curTotal += FileLibraryPath.stepMap.get(note.getType());
-					if(e_note.element("dot") != null) curTotal += FileLibraryPath.stepMap.get(note.getType())/2;
+					//System.out.println(xmlFile.getName() + " " + e_note.element("duration").getText());
+					int dur = Integer.parseInt(e_note.element("duration").getText());
+					if(e_note.element("dot") != null){
+						curTotal += FileLibraryPath.stepMap.get(note.getType())/2;
+					}
+					note.setDur(dur);
 					
 					boolean isPitch = false;
 					MyPitch pitch = null;
 					if (e_note.element("pitch") != null) {
-						pitch = new MyPitch(e_note.element("pitch")
-								.element("step").getText(), e_note
-								.element("pitch").element("octave").getText());
+						String step = e_note.element("pitch").element("step").getText();
+						int alter = 0;
+						if(e_note.element("pitch").element("alter") != null)  alter = Integer.parseInt(e_note.element("pitch").element("alter").getText());
+						pitch = new MyPitch(step, e_note
+								.element("pitch").element("octave").getText(),alter);
 						isPitch = true;
 					}
 					note.setPitch(pitch);
